@@ -26,7 +26,7 @@ Application::~Application()
 int Application::run(void)
 {
     p_mainWindow = new QWidget;
-    p_mainWindow->setWindowTitle("Program pro zobrazeni sekvence z PDB souboru");
+    p_mainWindow->setWindowTitle("Show sequence from PDB file");
 
     p_graphicWidget = new GraphicWidget;
 
