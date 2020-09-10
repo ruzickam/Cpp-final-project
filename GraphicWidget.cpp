@@ -32,9 +32,8 @@ GraphicWidget::~GraphicWidget()
         delete p_atoms[i];
         p_atoms[i] = NULL;
     }
-    
-    p_residues.clear();
-    p_atoms.clear();
+        
+    // not necessary to .clear()
 }
 
 //==============================================================================
