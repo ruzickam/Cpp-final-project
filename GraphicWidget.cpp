@@ -17,6 +17,23 @@ GraphicWidget::GraphicWidget()
     displayShortcuts = true;
 }
 
+GraphicWidget::~GraphicWidget()
+{
+    // clear p_residues
+    int selection = p_residues.size();
+    for(int i=0; i < selection; i++){
+        delete p_residues[i];
+        p_residues[i] = NULL;
+    }
+    
+    // clear p_atoms
+    selection = p_atoms.size();
+    for(int i=0; i < selection; i++){
+        delete p_atoms[i];
+        p_atoms[i] = NULL;
+    }
+}
+
 //==============================================================================
 //------------------------------------------------------------------------------
 //==============================================================================
