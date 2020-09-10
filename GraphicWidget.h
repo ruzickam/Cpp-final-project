@@ -13,6 +13,9 @@ class GraphicWidget : public QWidget
 public:
     // constructor
     GraphicWidget();
+    
+    // destructor
+    virtual ~GraphicWidget();
 
     // open & read PDB file
     bool readPdbFile(void);
