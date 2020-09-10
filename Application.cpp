@@ -11,6 +11,10 @@ Application::Application(int &argc, char *argv[]) : QApplication(argc, argv)
 
 Application::~Application()
 {
+    if( p_graphicWidget != NULL ){
+        delete p_graphicWidget;
+    }
+    
     if( p_mainWindow != NULL ){
         delete p_mainWindow;
     }
