@@ -7,6 +7,11 @@ Application::Application(int &argc, char *argv[]) : QApplication(argc, argv)
 {
     p_graphicWidget = NULL;
     p_mainWindow = NULL;
+    p_buttonHide = NULL;
+    p_buttonShow = NULL;
+    p_buttonOpenFile = NULL;
+    p_rightLayout = NULL;
+    p_mainLayout = NULL;
 }
 
 Application::~Application()
@@ -18,9 +23,34 @@ Application::~Application()
     if( p_mainWindow != NULL ){
         delete p_mainWindow;
     }
+    
+    if( p_buttonHide != NULL ){
+        delete p_buttonHide;
+    }
+    
+    if( p_buttonShow != NULL ){
+        delete p_buttonShow;
+    }
+    
+    if( p_buttonOpenFile != NULL ){
+        delete p_buttonOpenFile;
+    }
+    
+    if( p_rightLayout != NULL ){
+        delete p_rightLayout;
+    }
+    
+    if( p_mainLayout != NULL ){
+        delete p_mainLayout;
+    }
 
     p_graphicWidget = NULL;
     p_mainWindow = NULL;
+    p_buttonHide = NULL;
+    p_buttonShow = NULL;
+    p_buttonOpenFile = NULL;
+    p_rightLayout = NULL;
+    p_mainLayout = NULL;
 }
 
 //==============================================================================
