@@ -153,7 +153,7 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
     // file name
     painter.setPen(pen1);
     painter.setFont(font1);
-    painter.drawText(10,10,"Soubor:");
+    painter.drawText(10,10,"File:");
     painter.drawText(10,30,fileName);
 
     // print symbol of residues
@@ -197,10 +197,10 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
 
         string residueDescription;
         ostringstream ss;
-        ss << "Residuum: ";
+        ss << "Residue: ";
         ss << p_residues[selectedResidue]->getResidueName();
         ss << p_residues[selectedResidue]->getResidueNumber();
-        ss << "     Pocet atomu: ";
+        ss << "     Number of atoms: ";
         ss << p_residues[selectedResidue]->getAtomsCount();
         residueDescription = ss.str();
 
