@@ -23,14 +23,14 @@ GraphicWidget::~GraphicWidget()
     int selection = p_residues.size();
     for(int i=0; i < selection; i++){
         delete p_residues[i];
-        p_residues[i] = NULL;
+        p_residues[i] = nullptr;
     }
     
     // clear p_atoms
     selection = p_atoms.size();
     for(int i=0; i < selection; i++){
         delete p_atoms[i];
-        p_atoms[i] = NULL;
+        p_atoms[i] = nullptr;
     }
         
     // not necessary to .clear()
@@ -65,7 +65,7 @@ bool GraphicWidget::readPdbFile(void)
                 Atom* p_atom = new Atom;
                 p_atom->readLine(line,numLine);
                 p_atoms.push_back(p_atom);
-                p_atom = NULL;
+                p_atom = nullptr;
             } else {
                 cout << "Warning: Line (" << numLine << ") does not contain either ATOM or HETATM record" << endl;
             }
@@ -107,7 +107,7 @@ bool GraphicWidget::setResidues(void)
                 p_residue->setAtomFirst(i);
 
                 p_residues.push_back(p_residue);
-                p_residue = NULL;
+                p_residue = nullptr;
             }
         } else { // all other atoms
             if ( p_atoms[i]->getResidueNumber() != p_atoms[i+1]->getResidueNumber() ){  // distinguish between two different residue
@@ -122,7 +122,7 @@ bool GraphicWidget::setResidues(void)
                 firstAtom = i+1;
 
                 p_residues.push_back(p_residue);
-                p_residue = NULL;
+                p_residue = nullptr;
             }
         }
     }
@@ -255,12 +255,12 @@ void GraphicWidget::openFile(void)
     int selection = p_residues.size();
     for(int i=0; i < selection; i++){
         delete p_residues[i];
-        p_residues[i] = NULL;
+        p_residues[i] = nullptr;
     }
     selection = p_atoms.size();
     for(int i=0; i < selection; i++){
         delete p_atoms[i];
-        p_atoms[i] = NULL;
+        p_atoms[i] = nullptr;
     }
     p_residues.clear();
     p_atoms.clear();

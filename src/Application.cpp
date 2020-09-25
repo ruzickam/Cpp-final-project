@@ -5,22 +5,22 @@
 
 Application::Application(int &argc, char *argv[]) : QApplication(argc, argv)
 {
-    p_graphicWidget = NULL;
-    p_mainWindow = NULL;
+    p_graphicWidget = nullptr;
+    p_mainWindow = nullptr;
 }
 
 Application::~Application()
 {
-    if( p_graphicWidget != NULL ){
+    if( p_graphicWidget != nullptr ){
         delete p_graphicWidget;
     }
     
-    if( p_mainWindow != NULL ){
+    if( p_mainWindow != nullptr ){
         delete p_mainWindow;
     }  
 
-    p_graphicWidget = NULL;
-    p_mainWindow = NULL;
+    p_graphicWidget = nullptr;
+    p_mainWindow = nullptr;
 }
 
 //==============================================================================
@@ -61,29 +61,29 @@ int Application::run(void)
 
     return QApplication::exec();
     
-    if( p_buttonHide != NULL ){
+    if( p_buttonHide != nullptr ){
         delete p_buttonHide;
     }
     
-    if( p_buttonShow != NULL ){
+    if( p_buttonShow != nullptr ){
         delete p_buttonShow;
     }
     
-    if( p_buttonOpenFile != NULL ){
+    if( p_buttonOpenFile != nullptr ){
         delete p_buttonOpenFile;
     }
     
-    if( p_rightLayout != NULL ){
+    if( p_rightLayout != nullptr ){
         delete p_rightLayout;
     }
     
-    if( p_mainLayout != NULL ){
+    if( p_mainLayout != nullptr ){
         delete p_mainLayout;
     }
     
-    p_buttonHide = NULL;
-    p_buttonShow = NULL;
-    p_buttonOpenFile = NULL;
-    p_rightLayout = NULL;
-    p_mainLayout = NULL;
+    p_buttonHide = nullptr;
+    p_buttonShow = nullptr;
+    p_buttonOpenFile = nullptr;
+    p_rightLayout = nullptr;
+    p_mainLayout = nullptr;
 }

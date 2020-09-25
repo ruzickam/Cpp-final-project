@@ -3,10 +3,12 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = 
-DEPENDPATH += .
-INCLUDEPATH += .
+TARGET = final
+DEPENDPATH += src/
+INCLUDEPATH += src/
+QT += widgets
+CONFIG += c++11
 
 # Input
-HEADERS += Application.h Atom.h GraphicWidget.h Residue.h
-SOURCES += Application.cpp Atom.cpp GraphicWidget.cpp main.cpp Residue.cpp
+HEADERS += src/Application.h src/Atom.h src/GraphicWidget.h src/Residue.h
+SOURCES += src/Application.cpp src/Atom.cpp src/GraphicWidget.cpp src/main.cpp src/Residue.cpp
