@@ -40,8 +40,8 @@ private:
     QString fileName;
 
     // atom & residue containers
-    std::vector<Atom*> p_atoms;
-    std::vector<Residue*> p_residues;
+    std::vector<Atom>		atoms;
+    std::vector<Residue>	residues;
 
     // selected residue
     int selectedResidue;

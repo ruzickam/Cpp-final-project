@@ -1,31 +1,11 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <iostream>
 #include "Application.h"
-
-using namespace std;
 
 Application::Application(int &argc, char *argv[]) : QApplication(argc, argv)
 {
-    p_graphicWidget = nullptr;
-    p_mainWindow = nullptr;
-}
 
-Application::~Application()
-{
-    if( p_graphicWidget != nullptr ){
-        delete p_graphicWidget;
-	cout << "Deleted p_graphicWidget" << endl;
-    }
-    
-    if( p_mainWindow != nullptr ){
-        delete p_mainWindow;
-	cout << "Deleted p_mainWindow" << endl;
-    }  
-
-    p_graphicWidget = nullptr;
-    p_mainWindow = nullptr;
 }
 
 //==============================================================================
@@ -34,10 +14,10 @@ Application::~Application()
 
 int Application::run(void)
 {
-    p_mainWindow = new QWidget;
-    p_mainWindow->setWindowTitle("Show sequence from PDB file");
+    QWidget mainWindow;
+    mainWindow.setWindowTitle("Show sequence from PDB file");
 
-    p_graphicWidget = new GraphicWidget;   
+    GraphicWidget* p_graphicWidget = new GraphicWidget;   
     p_graphicWidget->setMinimumSize(400,700);
 
     // right column with buttons
@@ -55,8 +35,8 @@ int Application::run(void)
     p_mainLayout->addWidget(p_graphicWidget);
     p_mainLayout->addLayout(p_rightLayout);
 
-    p_mainWindow->setLayout(p_mainLayout);
-    p_mainWindow->show();
+    mainWindow.setLayout(p_mainLayout);
+    mainWindow.show();
 
     // click signals for buttons
     QObject::connect(p_buttonHide,SIGNAL(clicked()),p_graphicWidget,SLOT(hideGraphic()));
