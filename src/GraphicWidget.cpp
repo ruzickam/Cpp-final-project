@@ -223,8 +223,13 @@ void GraphicWidget::showGraphic(void)
 void GraphicWidget::openFile(void)
 {
     // open PDB file
+    QString lastFileName = fileName;
     fileName = QFileDialog::getOpenFileName(this,"Open",".");
-    if( fileName.isEmpty() ) return;
+    if( fileName.isEmpty() ){
+	fileName = lastFileName;
+	return;
+    }
+
     string strFileName;
     strFileName = fileName.toLatin1().constData();
     cout << "File name: " << strFileName << endl;

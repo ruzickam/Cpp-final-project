@@ -1,10 +1,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <iostream>
 #include "Application.h"
-
-using namespace std;
 
 Application::Application( int &argc, char *argv[] ) : QApplication( argc, argv )
 {
