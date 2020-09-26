@@ -22,13 +22,15 @@ GraphicWidget::~GraphicWidget()
     // clear p_residues
     int selection = p_residues.size();
     for(int i=0; i < selection; i++){
-        delete p_residues[i];
+	cout << "Deleted: " << p_residues[i]->getResidueChar() << endl;
+	delete p_residues[i];
         p_residues[i] = nullptr;
     }
     
     // clear p_atoms
     selection = p_atoms.size();
     for(int i=0; i < selection; i++){
+	cout << "Deleted: " << p_atoms[i]->getResidueName() << endl;
         delete p_atoms[i];
         p_atoms[i] = nullptr;
     }
@@ -254,11 +256,13 @@ void GraphicWidget::openFile(void)
     // clear all previous data
     int selection = p_residues.size();
     for(int i=0; i < selection; i++){
+	cout << "Deleted: " << p_residues[i]->getResidueChar() << endl;
         delete p_residues[i];
         p_residues[i] = nullptr;
     }
     selection = p_atoms.size();
     for(int i=0; i < selection; i++){
+	cout << "Deleted: " << p_atoms[i]->getResidueName() << endl;
         delete p_atoms[i];
         p_atoms[i] = nullptr;
     }
