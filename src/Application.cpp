@@ -1,9 +1,12 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <iostream>
 #include "Application.h"
 
-Application::Application(int &argc, char *argv[]) : QApplication(argc, argv)
+using namespace std;
+
+Application::Application( int &argc, char *argv[] ) : QApplication( argc, argv )
 {
 
 }
@@ -15,33 +18,39 @@ Application::Application(int &argc, char *argv[]) : QApplication(argc, argv)
 int Application::run(void)
 {
     QWidget mainWindow;
-    mainWindow.setWindowTitle("Show sequence from PDB file");
 
-    GraphicWidget* p_graphicWidget = new GraphicWidget;   
-    p_graphicWidget->setMinimumSize(400,700);
+    QHBoxLayout mainLayout( &mainWindow );
 
-    // right column with buttons
-    QPushButton* p_buttonHide = new QPushButton("Hide");
-    QPushButton* p_buttonShow = new QPushButton("Show");
-    QPushButton* p_buttonOpenFile = new QPushButton("Open File");
+    GraphicWidget graphicWidget( &mainWindow );
+    QVBoxLayout rightLayout;
 
-    QVBoxLayout* p_rightLayout = new QVBoxLayout;
-    p_rightLayout->addWidget(p_buttonHide);
-    p_rightLayout->addWidget(p_buttonShow);
-    p_rightLayout->addWidget(p_buttonOpenFile);
-    p_rightLayout->addStretch();
+    QPushButton buttonHide( "Hide", &mainWindow );
+    QPushButton buttonShow( "Show", &mainWindow );
+    QPushButton buttonOpenFile( "Open File", &mainWindow ); 
 
-    QHBoxLayout* p_mainLayout = new QHBoxLayout;
-    p_mainLayout->addWidget(p_graphicWidget);
-    p_mainLayout->addLayout(p_rightLayout);
+    //--------------------------------------------------------------------------
+    
+    // add graphicWidget and rightLayout to mainLayout
+    mainLayout.addWidget( &graphicWidget );
+    mainLayout.addLayout( &rightLayout );  
 
-    mainWindow.setLayout(p_mainLayout);
+    // set graphicWidget size
+    graphicWidget.setMinimumSize( 400, 700 );
+
+    // right column with buttons  
+    rightLayout.addWidget( &buttonHide );
+    rightLayout.addWidget( &buttonShow );
+    rightLayout.addWidget( &buttonOpenFile );
+    rightLayout.addStretch();
+
+    // setup and show main window
+    mainWindow.setWindowTitle( "Show sequence from PDB file" );
     mainWindow.show();
 
     // click signals for buttons
-    QObject::connect(p_buttonHide,SIGNAL(clicked()),p_graphicWidget,SLOT(hideGraphic()));
-    QObject::connect(p_buttonShow,SIGNAL(clicked()),p_graphicWidget,SLOT(showGraphic()));
-    QObject::connect(p_buttonOpenFile,SIGNAL(clicked()),p_graphicWidget,SLOT(openFile()));
+    QObject::connect( &buttonHide, SIGNAL(clicked()), &graphicWidget, SLOT(hideGraphic()) );
+    QObject::connect( &buttonShow, SIGNAL(clicked()), &graphicWidget, SLOT(showGraphic()) );
+    QObject::connect( &buttonOpenFile, SIGNAL(clicked()), &graphicWidget, SLOT(openFile()) );
 
     return QApplication::exec();
 }

@@ -281,7 +281,7 @@ int Residue::getAtomsCount(void) const
 
 bool Residue::print(void) const
 {
-    cout << "Residue number: " << residueNumber << ", residue name: " << residueName << endl;
+    //cout << "Residue number: " << residueNumber << ", residue name: " << residueName << endl;
     return(true);
 }
 

@@ -12,10 +12,7 @@ class GraphicWidget : public QWidget
 
 public:
     // constructor
-    GraphicWidget();
-    
-    // destructor
-    virtual ~GraphicWidget();
+    GraphicWidget(QWidget* parent);
 
     // open & read PDB file
     bool readPdbFile(void);
@@ -25,9 +22,9 @@ public:
 
 protected:
     // add graphic & text
-    virtual void paintEvent(QPaintEvent* p_event);
+    void paintEvent(QPaintEvent* p_event);
     // mouse action
-    virtual void mousePressEvent(QMouseEvent* p_event);
+    void mousePressEvent(QMouseEvent* p_event);
 
 private slots:
     // actions on button push

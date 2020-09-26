@@ -183,6 +183,6 @@ string Atom::getResidueName(void) const
 
 bool Atom::print(void) const
 {
-    cout << "Atom number: " << atomNumber << " atom name: " << atomName << " coordinates: x=" << coordX << " y=" << coordY << " z=" << coordZ << " element name: " << elementName << endl;
+    //cout << "Atom number: " << atomNumber << " atom name: " << atomName << " coordinates: x=" << coordX << " y=" << coordY << " z=" << coordZ << " element name: " << elementName << endl;
     return(true);
 }

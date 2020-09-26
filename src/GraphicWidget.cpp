@@ -8,18 +8,13 @@
 
 using namespace std;
 
-GraphicWidget::GraphicWidget()
+GraphicWidget::GraphicWidget(QWidget* parent) : QWidget(parent)
 {
     fileName = "No file";
     selectedResidue = -1;
     rectWidth = 18;
     rectHeight = 20;
     displayShortcuts = true;
-}
-
-GraphicWidget::~GraphicWidget()
-{
-
 }
 
 //==============================================================================
@@ -52,7 +47,7 @@ bool GraphicWidget::readPdbFile(void)
                 atom.readLine(line,numLine);
                 atoms.push_back(atom);
             } else {
-                cout << "Warning: Line (" << numLine << ") does not contain either ATOM or HETATM record" << endl;
+                //cout << "Warning: Line (" << numLine << ") does not contain either ATOM or HETATM record" << endl;
             }
             numLine++;
         }
