@@ -7,9 +7,9 @@
 class Residue
 {
 public:  
-    // constructor
+    // constructors
     Residue();
-    Residue(int argAtomFirst,int argAtomLast,const std::string& argResidueName,int argResidueNumber);
+    Residue(int argAtomFirst, int argAtomLast, const std::string& argResidueName, int argResidueNumber);
 
     // setters
     bool setAtomFirst(int argAtomFirst);

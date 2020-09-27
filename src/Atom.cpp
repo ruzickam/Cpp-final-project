@@ -4,11 +4,9 @@
 #include <iomanip>
 #include "Atom.h"
 
-using namespace std;
-
 Atom::Atom()
 {
-    recordType = RECORD_UNKNOW;
+    recordType = RECORD_UNKNOWN;
     atomNumber = 0;
     atomName = "    ";
     alternateLocation = ' ';
@@ -31,15 +29,15 @@ Atom::Atom()
 //------------------------------------------------------------------------------
 //==============================================================================
 
-bool Atom::readLine(const string& line, int numLine)
+bool Atom::readLine(const std::string& line, int numLine)
 {
-    string recordName;
-    string s;
-    istringstream sstream;
+    std::string recordName;
+    std::string s;
+    std::istringstream sstream;
 
     // Line must have at least 53 chars to obtain all neccesary values
     if ( line.length() < 53 ){
-        cout << "Warning: the line (" << numLine << ") is too short" << endl;
+        std::cout << "Warning: the line (" << numLine << ") is too short" << std::endl;
         return(false);
     }
 
@@ -49,7 +47,7 @@ bool Atom::readLine(const string& line, int numLine)
     else if (recordName == "HETATM")
         recordType = RECORD_HEATM;
     else {
-        cout << "Warning: unknown record name in line (" << numLine << ")" << endl;
+        std::cout << "Warning: unknown record name in line (" << numLine << ")" << std::endl;
         return(false);    // cant continue
     }
 
@@ -58,7 +56,7 @@ bool Atom::readLine(const string& line, int numLine)
     sstream.clear();
     sstream >> atomNumber;
     if ( sstream.fail() ){
-        cout << "Warning: error reading line (" << numLine << ")" << endl;
+        std::cout << "Warning: error reading line (" << numLine << ")" << std::endl;
         return(false);
     }
 
@@ -75,7 +73,7 @@ bool Atom::readLine(const string& line, int numLine)
     sstream.clear();
     sstream >> residueNumber;
     if ( sstream.fail() ){
-        cout << "Warning: error reading line (" << numLine << ")" << endl;
+        std::cout << "Warning: error reading line (" << numLine << ")" << std::endl;
         return(false);
     }
 
@@ -86,7 +84,7 @@ bool Atom::readLine(const string& line, int numLine)
     sstream.clear();
     sstream >> coordX >> coordY >> coordZ;
     if ( sstream.fail() ){
-        cout << "Warning: error reading line (" << numLine << ")" << endl;
+        std::cout << "Warning: error reading line (" << numLine << ")" << std::endl;
         return(false);
     }
 
@@ -123,7 +121,7 @@ bool Atom::readLine(const string& line, int numLine)
 //------------------------------------------------------------------------------
 //==============================================================================
 
-bool Atom::writeLine(ofstream ofile) const
+bool Atom::writeLine(std::ofstream ofile) const
 {
     if ( recordType == RECORD_ATOM )
         ofile << "ATOM  ";
@@ -132,32 +130,32 @@ bool Atom::writeLine(ofstream ofile) const
     else
         return(false);
 
-    ofile << right << setw(5) << atomNumber;
+    ofile << std::right << std::setw(5) << atomNumber;
     ofile << ' ';
-    ofile << left << setw(4) << atomName;
+    ofile << std::left << std::setw(4) << atomName;
     ofile << alternateLocation;
-    ofile << left << setw(3) << residueName;
+    ofile << std::left << std::setw(3) << residueName;
     ofile << ' ';
     ofile << chainId;
-    ofile << right << setw(4) << residueNumber;
+    ofile << std::right << std::setw(4) << residueNumber;
     ofile << iCode;
     ofile << "   ";
-    ofile << right << fixed << setprecision(3);
-    ofile << setw(8) << coordX;
-    ofile << setw(8) << coordY;
-    ofile << setw(8) << coordZ;
+    ofile << std::right << std::fixed << std::setprecision(3);
+    ofile << std::setw(8) << coordX;
+    ofile << std::setw(8) << coordY;
+    ofile << std::setw(8) << coordZ;
     if ( isOccupancy )
-        ofile << right << fixed << setprecision(2) << setw(6) << occupancy;
+        ofile << std::right << std::fixed << std::setprecision(2) << std::setw(6) << occupancy;
     else
         ofile << "      ";
     if ( isTempFactor )
-        ofile << right << fixed << setprecision(2) << setw(6) << tempFactor;
+        ofile << std::right << std::fixed << std::setprecision(2) << std::setw(6) << tempFactor;
     else
         ofile << "      ";
     ofile << "          ";
-    ofile << right << setw(2) << elementName;
-    ofile << left << setw(2) << formalCharge;
-    ofile << endl;
+    ofile << std::right << std::setw(2) << elementName;
+    ofile << std::left << std::setw(2) << formalCharge;
+    ofile << std::endl;
 
     return(true);
 }
@@ -172,7 +170,7 @@ int Atom::getResidueNumber(void) const
     return( residueNumber );
 }
 
-string Atom::getResidueName(void) const
+std::string Atom::getResidueName(void) const
 {
     return( residueName );
 }
@@ -183,6 +181,6 @@ string Atom::getResidueName(void) const
 
 bool Atom::print(void) const
 {
-    //cout << "Atom number: " << atomNumber << " atom name: " << atomName << " coordinates: x=" << coordX << " y=" << coordY << " z=" << coordZ << " element name: " << elementName << endl;
+    //std::cout << "Atom number: " << atomNumber << " atom name: " << atomName << " coordinates: x=" << coordX << " y=" << coordY << " z=" << coordZ << " element name: " << elementName << std::endl;
     return(true);
 }

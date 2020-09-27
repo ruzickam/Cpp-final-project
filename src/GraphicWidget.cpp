@@ -6,8 +6,6 @@
 #include <QMouseEvent>
 #include "GraphicWidget.h"
 
-using namespace std;
-
 GraphicWidget::GraphicWidget(QWidget* parent) : QWidget(parent)
 {
     fileName = "No file";
@@ -23,18 +21,18 @@ GraphicWidget::GraphicWidget(QWidget* parent) : QWidget(parent)
 
 bool GraphicWidget::readPdbFile(void)
 {
-    cout << endl << "Reading PDB file..." << endl;
+    std::cout << std::endl << "Reading PDB file..." << std::endl;
 
-    ifstream ifile;
+    std::ifstream ifile;
 
     ifile.open( fileName.toLatin1().constData() );
     if( ifile.fail() ){
-        cout << "ERROR: unable to open input file!" << endl;
+        std::cout << "ERROR: unable to open input file!" << std::endl;
         return(false);
     }
 
-    string line;
-    string recordName;
+    std::string line;
+    std::string recordName;
     int numLine = 1;
 
     while ( !ifile.eof() ){
@@ -47,7 +45,7 @@ bool GraphicWidget::readPdbFile(void)
                 atom.readLine(line,numLine);
                 atoms.push_back(atom);
             } else {
-                //cout << "Warning: Line (" << numLine << ") does not contain either ATOM or HETATM record" << endl;
+                //std::cout << "Warning: Line (" << numLine << ") does not contain either ATOM or HETATM record" << std::endl;
             }
             numLine++;
         }
@@ -145,7 +143,7 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
     int b = 0;
     for(int i=0; i < selection; i++) {
         // draw rectangle
-        tie(r, g, b) = residues[i].getColorRgb();
+        std::tie(r, g, b) = residues[i].getColorRgb();
         painter.setBrush(QColor(r,g,b));
         painter.setPen(Qt::NoPen);
         painter.drawRect(xPos,yPos,rectWidth,rectHeight);
@@ -173,8 +171,8 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
         painter.setPen(pen2);
         painter.drawRect(residues[selectedResidue].getPosX(),residues[selectedResidue].getPosY(),rectWidth,rectHeight);
 
-        string residueDescription;
-        ostringstream ss;
+        std::string residueDescription;
+        std::ostringstream ss;
         ss << "Residue: ";
         ss << residues[selectedResidue].getResidueName();
         ss << residues[selectedResidue].getResidueNumber();
@@ -230,9 +228,9 @@ void GraphicWidget::openFile(void)
 	return;
     }
 
-    string strFileName;
+    std::string strFileName;
     strFileName = fileName.toLatin1().constData();
-    cout << "File name: " << strFileName << endl;
+    std::cout << "File name: " << strFileName << std::endl;
 
     // clear all previous data
     residues.clear();

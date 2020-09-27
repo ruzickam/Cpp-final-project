@@ -37,7 +37,7 @@ private:
     QString fileName;
 
     // atom & residue containers
-    std::vector<Atom>		atoms;
+    std::vector<Atom>       atoms;
     std::vector<Residue>	residues;
 
     // selected residue
