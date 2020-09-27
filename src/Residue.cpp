@@ -206,7 +206,7 @@ double Residue::getPosY(void) const
 
 int Residue::getAtomsCount(void) const
 {
-    return( atomLast - atomFirst );
+    return( atomLast - atomFirst + 1 );
 }
 
 //==============================================================================

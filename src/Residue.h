@@ -6,7 +6,9 @@
 
 class Residue
 {
-public:  
+public:
+    // constructors
+
     // setters
     bool setAtomFirst(int argAtomFirst);
     bool setAtomLast(int argAtomLast);

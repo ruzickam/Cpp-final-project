@@ -11,7 +11,7 @@ class GraphicWidget : public QWidget
     Q_OBJECT
 
 public:
-    // constructor
+    // constructors
     GraphicWidget(QWidget* parent);
 
     // open & read PDB file
@@ -32,13 +32,13 @@ private slots:
     void showGraphic(void);
     void openFile(void);
 
-private:
+private:   
     // PDB file name
     QString fileName {"No file"};
 
     // atom & residue containers
     std::vector<Atom>       atoms;
-    std::vector<Residue>	residues;
+    std::vector<Residue>    residues;
 
     // selected residue
     int selectedResidue {-1};

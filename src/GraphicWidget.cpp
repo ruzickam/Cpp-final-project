@@ -26,12 +26,12 @@ bool GraphicWidget::readPdbFile(void)
 
     std::string line;
     std::string recordName;
-    int numLine = 1;
+    int numLine {1};
 
     while ( !ifile.eof() ){
         getline(ifile,line);
         if ( line.length() >= 6 ){
-            recordName = line.substr(0,6);
+            recordName = line.substr(0, 6);
             if ( recordName == "ATOM  " ||
                  recordName == "HETATM") {
                 Atom atom;
@@ -40,17 +40,15 @@ bool GraphicWidget::readPdbFile(void)
             } else {
                 std::cout << "Warning: Line (" << numLine << ") does not contain either ATOM or HETATM record" << std::endl;
             }
-            numLine++;
+            ++numLine;
         }
     }
 
     ifile.close();
 
     // print atoms
-    int selection = atoms.size();
-
-    for(int i=0; i < selection; i++) {
-        atoms[i].print();
+    for(auto const& i : atoms) {
+        i.print();
     }
 
     return(true);
@@ -62,45 +60,43 @@ bool GraphicWidget::readPdbFile(void)
 
 bool GraphicWidget::setResidues(void)
 {
-    int firstAtom = 0;                  // index of the first atom in a residue
-    int selection = atoms.size();     // how many atoms are selected
+    int firstAtom {0};                  // index of the first atom in a residue
 
-    for(int i=0; i < selection; i++) {
-        if ( (i+1) == selection ){ // last atom in molecule
-            if ( atoms[i].getResidueNumber() != atoms[i-1].getResidueNumber() ){  // distinguish between two different residue
+    for(auto i {0}; static_cast<std::vector<int>::size_type>(i) < atoms.size() - 1; ++i) {
 
-                Residue residue;
+        if ( atoms[i].getResidueNumber() != atoms[i+1].getResidueNumber() ){  // distinguish between two different residue
 
-                residue.setResidueNumber(atoms[i].getResidueNumber());
-                residue.setResidueName(atoms[i].getResidueName());
+            Residue residue;
 
-                residue.setAtomLast(i);
-                residue.setAtomFirst(i);
+            residue.setResidueNumber(atoms[i].getResidueNumber());
+            residue.setResidueName(atoms[i].getResidueName());
 
-                residues.push_back(residue);
-            }
-        } else { // all other atoms
-            if ( atoms[i].getResidueNumber() != atoms[i+1].getResidueNumber() ){  // distinguish between two different residue
+            residue.setAtomLast(i);
+            residue.setAtomFirst(firstAtom);
 
-                Residue residue;
+            residues.push_back(residue);
 
-                residue.setResidueNumber(atoms[i].getResidueNumber());
-                residue.setResidueName(atoms[i].getResidueName());
+            firstAtom = i + 1;
+        }
 
-                residue.setAtomLast(i);
-                residue.setAtomFirst(firstAtom);
-                firstAtom = i+1;
+        // last atom
+        if ( static_cast<std::vector<int>::size_type>(i+2) == atoms.size() ){
 
-                residues.push_back(residue);
-            }
+            Residue residue;
+
+            residue.setResidueNumber(atoms[i+1].getResidueNumber());
+            residue.setResidueName(atoms[i+1].getResidueName());
+
+            residue.setAtomLast(i+1);
+            residue.setAtomFirst(firstAtom);
+
+            residues.push_back(residue);
         }
     }
 
     // print residues
-    selection = residues.size();
-
-    for(int i=0; i < selection; i++) {
-        residues[i].print();
+    for(auto const& i : residues) {
+        i.print();
     }
 
     return(true);
@@ -114,37 +110,36 @@ bool GraphicWidget::setResidues(void)
 
 void GraphicWidget::paintEvent(QPaintEvent* p_event)
 {
-    QPainter painter(this);
-    QPen pen1(Qt::black, 4);
-    QPen pen2(Qt::red, 3);
-    QFont font1("Helvetica",9,0,false);
+    QPainter painter {this};
+    QPen pen1 {Qt::black, 4};
+    QPen pen2 {Qt::red, 3};
+    QFont font1 {"Helvetica", 9, 0, false};
 
     // file name
     painter.setPen(pen1);
     painter.setFont(font1);
-    painter.drawText(10,10,"File:");
-    painter.drawText(10,30,fileName);
+    painter.drawText(10, 10, "File:");
+    painter.drawText(10, 30, fileName);
 
     // print symbol of residues
     painter.setFont(font1);
-    int selection = residues.size();
-    int column = 0;
-    int xPos = 10;  // start position of the first residue
-    int yPos = 56;  // start position of the first residue
-    int r = 0;
-    int g = 0;
-    int b = 0;
-    for(int i=0; i < selection; i++) {
+    int column {0};
+    int xPos {10};  // start position of the first residue
+    int yPos {56};  // start position of the first residue
+    int r {0};
+    int g {0};
+    int b {0};
+    for(auto i {0}; static_cast<std::vector<int>::size_type>(i) < residues.size(); ++i) {
         // draw rectangle
         std::tie(r, g, b) = residues[i].getColorRgb();
         painter.setBrush(QColor(r,g,b));
         painter.setPen(Qt::NoPen);
-        painter.drawRect(xPos,yPos,rectWidth,rectHeight);
-        residues[i].setPosXY(xPos,yPos);
+        painter.drawRect(xPos, yPos, rectWidth, rectHeight);
+        residues[i].setPosXY(xPos, yPos);
         // print symbol
         if ( displayShortcuts == true ){
             painter.setPen(pen1);
-            painter.drawText(xPos+(rectWidth*0.28),yPos+(rectHeight*0.78),QChar(residues[i].getResidueChar()));
+            painter.drawText(xPos + (rectWidth * 0.28), yPos + (rectHeight * 0.78), QChar(residues[i].getResidueChar()));
         }
         // check column
         if ( column == 19 ){
@@ -159,10 +154,10 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
     }
 
     // add red rect & desc for selected residue
-    if( ( selection > 0 ) && ( selectedResidue > -1 ) ){
+    if( ( residues.size() > 0 ) && ( selectedResidue > -1 ) ){
         painter.setBrush(Qt::NoBrush);
         painter.setPen(pen2);
-        painter.drawRect(residues[selectedResidue].getPosX(),residues[selectedResidue].getPosY(),rectWidth,rectHeight);
+        painter.drawRect(residues[selectedResidue].getPosX(), residues[selectedResidue].getPosY(), rectWidth, rectHeight);
 
         std::string residueDescription;
         std::ostringstream ss;
@@ -174,7 +169,7 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
         residueDescription = ss.str();
 
         painter.setPen(pen1);
-        painter.drawText(10,height()-10,residueDescription.c_str());
+        painter.drawText(10, height()-10, residueDescription.c_str());
     }
 
 
@@ -182,9 +177,7 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
 
 void GraphicWidget::mousePressEvent(QMouseEvent* p_event)
 {
-    int selection = residues.size();
-
-    for(int i=0; i < selection; i++) {
+    for(auto i {0}; static_cast<std::vector<int>::size_type>(i) < residues.size(); i++) {
         if ( ( p_event->x() > residues[i].getPosX() && p_event->x() < ( residues[i].getPosX() + rectWidth ) ) && ( p_event->y() > residues[i].getPosY() && p_event->y() < ( residues[i].getPosY() + rectHeight ) ) ){
             selectedResidue = i;
         }
@@ -214,11 +207,11 @@ void GraphicWidget::showGraphic(void)
 void GraphicWidget::openFile(void)
 {
     // open PDB file
-    QString lastFileName = fileName;
-    fileName = QFileDialog::getOpenFileName(this,"Open",".");
+    QString lastFileName {fileName};
+    fileName = QFileDialog::getOpenFileName(this, "Open", ".");
     if( fileName.isEmpty() ){
-	fileName = lastFileName;
-	return;
+        fileName = lastFileName;
+        return;
     }
 
     std::string strFileName;

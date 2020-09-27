@@ -11,6 +11,8 @@ public:
     static constexpr int RECORD_ATOM {1};
     static constexpr int RECORD_HEATM {2};
 
+    // constructors
+
     // getters
     int getResidueNumber(void) const;
     std::string getResidueName(void) const;
