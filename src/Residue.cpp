@@ -151,112 +151,71 @@ char Residue::getResidueChar(void) const
     return( 'X' );
 }
 
-void Residue::getColorRgb(int* r, int* g, int* b) const
+tuple<int, int, int> Residue::getColorRgb(void) const
 {
-    // default grey color
-    *r = 153;
-    *g = 153;
-    *b = 153;
-
     if ( residueName == "ALA" ){
-        *r = 204;
-        *g = 255;
-        *b = 255;
-    }
-    if ( residueName == "ARG" ){
-        *r = 230;
-        *g = 6;
-        *b = 6;
-    }
-    if ( residueName == "ASN" ){
-        *r = 255;
-        *g = 153;
-        *b = 0;
-    }
-    if ( residueName == "ASP" ){
-        *r = 255;
-        *g = 204;
-        *b = 153;
-    }
-    if ( residueName == "CYS" ){
-        *r = 0;
-        *g = 255;
-        *b = 255;
-    }
-    if ( residueName == "GLN" ){
-        *r = 255;
-        *g = 102;
-        *b = 0;
-    }
-    if ( residueName == "GLU" ){
-        *r = 255;
-        *g = 204;
-        *b = 0;
-    }
-    if ( residueName == "GLY" ){
-        *r = 0;
-        *g = 255;
-        *b = 0;
-    }
-    if ( residueName == "HIS" ){
-        *r = 255;
-        *g = 255;
-        *b = 153;
-    }
-    if ( residueName == "ILE" ){
-        *r = 0;
-        *g = 0;
-        *b = 128;
-    }
-    if ( residueName == "LEU" ){
-        *r = 51;
-        *g = 102;
-        *b = 255;
-    }
-    if ( residueName == "LYS" ){
-        *r = 198;
-        *g = 6;
-        *b = 0;
-    }
-    if ( residueName == "MET" ){
-        *r = 153;
-        *g = 204;
-        *b = 255;
-    }
-    if ( residueName == "PHE" ){
-        *r = 0;
-        *g = 204;
-        *b = 255;
-    }
-    if ( residueName == "PRO" ){
-        *r = 255;
-        *g = 255;
-        *b = 0;
-    }
-    if ( residueName == "SER" ){
-        *r = 204;
-        *g = 255;
-        *b = 153;
-    }
-    if ( residueName == "THR" ){
-        *r = 0;
-        *g = 255;
-        *b = 153;
-    }
-    if ( residueName == "TRP" ){
-        *r = 204;
-        *g = 153;
-        *b = 255;
-    }
-    if ( residueName == "TYR" ){
-        *r = 204;
-        *g = 255;
-        *b = 204;
-    }
-    if ( residueName == "VAL" ){
-        *r = 0;
-        *g = 0;
-        *b = 255;
+	return  make_tuple(204, 255, 255);
+
+    } else if ( residueName == "ARG" ){
+	return  make_tuple(230, 6, 6);
+
+    } else if ( residueName == "ASN" ){
+	return  make_tuple(255, 153, 0);
+
+    } else if ( residueName == "ASP" ){
+	return  make_tuple(255, 204, 153);
+
+    } else if ( residueName == "CYS" ){
+	return  make_tuple(0, 255, 255);
+
+    } else if ( residueName == "GLN" ){
+	return  make_tuple(255, 102, 0);
+
+    } else if ( residueName == "GLU" ){
+	return  make_tuple(255, 102, 0);
+
+    } else if ( residueName == "GLY" ){
+	return  make_tuple(0, 255, 0);
+
+    } else if ( residueName == "HIS" ){
+	return  make_tuple(255, 255, 153);
+
+    } else if ( residueName == "ILE" ){
+	return  make_tuple(0, 0, 128);
+
+    } else if ( residueName == "LEU" ){
+	return  make_tuple(51, 102, 255);
+
+    } else if ( residueName == "LYS" ){
+	return  make_tuple(198, 6, 0);
+
+    } else if ( residueName == "MET" ){
+	return  make_tuple(153, 204, 255);
+
+    } else if ( residueName == "PHE" ){
+	return  make_tuple(0, 204, 255);
+
+    } else if ( residueName == "PRO" ){
+	return  make_tuple(255, 255, 0);
+
+    } else if ( residueName == "SER" ){
+	return  make_tuple(204, 255, 153);
+
+    } else if ( residueName == "THR" ){
+	return  make_tuple(0, 255, 153);
+
+    } else if ( residueName == "TRP" ){
+	return  make_tuple(204, 153, 255);
+
+    } else if ( residueName == "TYR" ){
+	return  make_tuple(204, 255, 204);
+
+    } else if ( residueName == "VAL" ){
+	return  make_tuple(0, 0, 255);
+
+    } else {
+	// default grey color
+        return  make_tuple(153, 153, 153);
     }
 }
 

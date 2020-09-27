@@ -123,7 +123,7 @@ bool Atom::readLine(const string &line, int numLine)
 //------------------------------------------------------------------------------
 //==============================================================================
 
-bool Atom::writeLine(ofstream &ofile) const
+bool Atom::writeLine(ofstream ofile) const
 {
     if ( recordType == RECORD_ATOM )
         ofile << "ATOM  ";

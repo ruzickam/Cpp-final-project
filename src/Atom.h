@@ -7,9 +7,9 @@ class Atom
 {
 public:
     // record types
-    static const int RECORD_UNKNOW = 0;
-    static const int RECORD_ATOM = 1;
-    static const int RECORD_HEATM = 2;
+    static constexpr int RECORD_UNKNOW = 0;
+    static constexpr int RECORD_ATOM = 1;
+    static constexpr int RECORD_HEATM = 2;
 
     // constructor
     Atom();
@@ -19,8 +19,8 @@ public:
     std::string getResidueName(void) const;
 
     // manipulation methods
-    bool readLine(const std::string &line, int numLine);
-    bool writeLine(std::ofstream &ofile) const;
+    bool readLine(const std::string& line, int numLine);
+    bool writeLine(std::ofstream ofile) const;
     bool print(void) const;
 
 private:

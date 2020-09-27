@@ -145,7 +145,7 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
     int b = 0;
     for(int i=0; i < selection; i++) {
         // draw rectangle
-        residues[i].getColorRgb(&r,&g,&b);
+        tie(r, g, b) = residues[i].getColorRgb();
         painter.setBrush(QColor(r,g,b));
         painter.setPen(Qt::NoPen);
         painter.drawRect(xPos,yPos,rectWidth,rectHeight);

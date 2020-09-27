@@ -9,8 +9,8 @@ class Application : public QApplication
     Q_OBJECT
 
 public:
-    Application( int &argc, char *argv[] );
-    int run( void );
+    Application(int &argc, char *argv[]);
+    int run(void) const;
 private:
 };
 
