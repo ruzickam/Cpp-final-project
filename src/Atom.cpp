@@ -31,7 +31,7 @@ Atom::Atom()
 //------------------------------------------------------------------------------
 //==============================================================================
 
-bool Atom::readLine(const string &line, int numLine)
+bool Atom::readLine(const string& line, int numLine)
 {
     string recordName;
     string s;

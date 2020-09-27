@@ -14,7 +14,7 @@ Residue::Residue()
     posY = 0.0;
 }
 
-Residue::Residue(int argAtomFirst, int argAtomLast, const string &argResidueName, int argResidueNumber)
+Residue::Residue(int argAtomFirst, int argAtomLast, const string& argResidueName, int argResidueNumber)
 {
     atomFirst = argAtomFirst;
     atomLast = argAtomLast;
@@ -42,7 +42,7 @@ bool Residue::setAtomLast(int argAtomLast)
     return(true);
 }
 
-bool Residue::setResidueName(const string &argResidueName)
+bool Residue::setResidueName(const string& argResidueName)
 {
     residueName = argResidueName;
     return(true);

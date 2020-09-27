@@ -189,7 +189,7 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
 
 }
 
-void GraphicWidget::mousePressEvent(QMouseEvent *p_event)
+void GraphicWidget::mousePressEvent(QMouseEvent* p_event)
 {
     int selection = residues.size();
 
