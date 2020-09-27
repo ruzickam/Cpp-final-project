@@ -11,7 +11,7 @@ public:
     static constexpr int RECORD_ATOM = 1;
     static constexpr int RECORD_HEATM = 2;
 
-    // constructor
+    // constructors
     Atom();
 
     // getters

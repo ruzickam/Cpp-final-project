@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QFileDialog>
 #include <QMouseEvent>
+#include <chrono>
 #include "GraphicWidget.h"
 
 GraphicWidget::GraphicWidget(QWidget* parent) : QWidget(parent)
@@ -21,6 +22,9 @@ GraphicWidget::GraphicWidget(QWidget* parent) : QWidget(parent)
 
 bool GraphicWidget::readPdbFile(void)
 {
+    // function duration - start
+    auto start = std::chrono::high_resolution_clock::now();
+
     std::cout << std::endl << "Reading PDB file..." << std::endl;
 
     std::ifstream ifile;
@@ -45,7 +49,7 @@ bool GraphicWidget::readPdbFile(void)
                 atom.readLine(line,numLine);
                 atoms.push_back(atom);
             } else {
-                //std::cout << "Warning: Line (" << numLine << ") does not contain either ATOM or HETATM record" << std::endl;
+                std::cout << "Warning: Line (" << numLine << ") does not contain either ATOM or HETATM record" << std::endl;
             }
             numLine++;
         }
@@ -59,6 +63,12 @@ bool GraphicWidget::readPdbFile(void)
     for(int i=0; i < selection; i++) {
         atoms[i].print();
     }
+
+    // function duration - stop & results
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+    std::cout << "Time taken by function: "
+             << duration.count() << " microseconds" << std::endl;
 
     return(true);
 }
