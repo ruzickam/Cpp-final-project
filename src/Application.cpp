@@ -3,10 +3,7 @@
 #include <QHBoxLayout>
 #include "Application.h"
 
-Application::Application(int &argc, char *argv[]) : QApplication(argc, argv)
-{
-
-}
+Application::Application(int &argc, char *argv[]) : QApplication(argc, argv) {}
 
 //==============================================================================
 //------------------------------------------------------------------------------
@@ -16,14 +13,14 @@ int Application::run(void) const
 {
     QWidget mainWindow;
 
-    QHBoxLayout mainLayout(&mainWindow);
+    QHBoxLayout mainLayout {&mainWindow};
 
-    GraphicWidget graphicWidget(&mainWindow);
+    GraphicWidget graphicWidget {&mainWindow};
     QVBoxLayout rightLayout;
 
-    QPushButton buttonHide("Hide", &mainWindow);
-    QPushButton buttonShow("Show", &mainWindow);
-    QPushButton buttonOpenFile("Open File", &mainWindow); 
+    QPushButton buttonHide {"Hide", &mainWindow};
+    QPushButton buttonShow {"Show", &mainWindow};
+    QPushButton buttonOpenFile {"Open File", &mainWindow};
 
     //--------------------------------------------------------------------------
     

@@ -1,28 +1,6 @@
 #include <iostream>
 #include "Residue.h"
 
-Residue::Residue()
-{
-    atomFirst = 0;
-    atomLast = 0;
-    residueName = "";
-    residueNumber = 0;
-
-    posX = 0.0;
-    posY = 0.0;
-}
-
-Residue::Residue(int argAtomFirst, int argAtomLast, const std::string& argResidueName, int argResidueNumber)
-{
-    atomFirst = argAtomFirst;
-    atomLast = argAtomLast;
-    residueName = argResidueName;
-    residueNumber = argResidueNumber;
-
-    posX = 0.0;
-    posY = 0.0;
-}
-
 //==============================================================================
 //------------------------------------------------------------------------------
 //==============================================================================
@@ -237,7 +215,7 @@ int Residue::getAtomsCount(void) const
 
 bool Residue::print(void) const
 {
-    //std::cout << "Residue number: " << residueNumber << ", residue name: " << residueName << std::endl;
+    std::cout << "Residue number: " << residueNumber << ", residue name: " << residueName << std::endl;
     return(true);
 }
 

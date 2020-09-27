@@ -34,21 +34,21 @@ private slots:
 
 private:
     // PDB file name
-    QString fileName;
+    QString fileName {"No file"};
 
     // atom & residue containers
     std::vector<Atom>       atoms;
     std::vector<Residue>	residues;
 
     // selected residue
-    int selectedResidue;
+    int selectedResidue {-1};
 
     // rectangle size
-    double rectWidth;
-    double rectHeight;
+    double rectWidth {18.0};
+    double rectHeight {20.0};
 
     // display shortcuts of residues
-    bool displayShortcuts;
+    bool displayShortcuts {true};
 };
 
 #endif // GRAPHICWIDGET_H

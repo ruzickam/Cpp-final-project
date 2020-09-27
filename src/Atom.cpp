@@ -4,27 +4,6 @@
 #include <iomanip>
 #include "Atom.h"
 
-Atom::Atom()
-{
-    recordType = RECORD_UNKNOWN;
-    atomNumber = 0;
-    atomName = "    ";
-    alternateLocation = ' ';
-    residueName = "   ";
-    chainId = ' ';
-    residueNumber = 0;
-    iCode = ' ';
-    coordX = 0;
-    coordY = 0;
-    coordZ = 0;
-    occupancy = 0;
-    tempFactor = 0;
-    elementName = "  ";
-    formalCharge = "  ";
-    isOccupancy = false;
-    isTempFactor = false;
-}
-
 //==============================================================================
 //------------------------------------------------------------------------------
 //==============================================================================
@@ -181,6 +160,6 @@ std::string Atom::getResidueName(void) const
 
 bool Atom::print(void) const
 {
-    //std::cout << "Atom number: " << atomNumber << " atom name: " << atomName << " coordinates: x=" << coordX << " y=" << coordY << " z=" << coordZ << " element name: " << elementName << std::endl;
+    std::cout << "Atom number: " << atomNumber << " atom name: " << atomName << " coordinates: x=" << coordX << " y=" << coordY << " z=" << coordZ << " element name: " << elementName << std::endl;
     return(true);
 }

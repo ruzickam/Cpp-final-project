@@ -7,10 +7,6 @@
 class Residue
 {
 public:  
-    // constructors
-    Residue();
-    Residue(int argAtomFirst, int argAtomLast, const std::string& argResidueName, int argResidueNumber);
-
     // setters
     bool setAtomFirst(int argAtomFirst);
     bool setAtomLast(int argAtomLast);
@@ -34,14 +30,14 @@ public:
 
 private:
     // residue data
-    int atomFirst;
-    int atomLast;
-    std::string residueName;
-    int residueNumber;
+    int atomFirst {0};
+    int atomLast {0};
+    std::string residueName {" "};
+    int residueNumber {0};
 
     // residue rectangle position
-    double posX;
-    double posY;
+    double posX {0.0};
+    double posY {0.0};
 };
 
 #endif // RESIDUE_H

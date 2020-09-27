@@ -7,12 +7,9 @@ class Atom
 {
 public:
     // record types
-    static constexpr int RECORD_UNKNOWN = 0;
-    static constexpr int RECORD_ATOM = 1;
-    static constexpr int RECORD_HEATM = 2;
-
-    // constructors
-    Atom();
+    static constexpr int RECORD_UNKNOWN {0};
+    static constexpr int RECORD_ATOM {1};
+    static constexpr int RECORD_HEATM {2};
 
     // getters
     int getResidueNumber(void) const;
@@ -25,23 +22,23 @@ public:
 
 private:
     // atom data
-    int recordType;
-    int atomNumber;
-    std::string atomName;
-    char alternateLocation;
-    std::string residueName;
-    char chainId;
-    int residueNumber;
-    char iCode;
-    double coordX;
-    double coordY;
-    double coordZ;
-    double occupancy;
-    double tempFactor;
-    std::string elementName;
-    std::string formalCharge;
-    bool isOccupancy;
-    bool isTempFactor;
+    int recordType {RECORD_UNKNOWN};
+    int atomNumber {0};
+    std::string atomName {"    "};
+    char alternateLocation {' '};
+    std::string residueName {"   "};
+    char chainId {' '};
+    int residueNumber {0};
+    char iCode {' '};
+    double coordX {0.0};
+    double coordY {0.0};
+    double coordZ {0.0};
+    double occupancy {0.0};
+    double tempFactor {0.0};
+    std::string elementName {"  "};
+    std::string formalCharge {"  "};
+    bool isOccupancy {false};
+    bool isTempFactor {false};
 };
 
 #endif // ATOM_H
