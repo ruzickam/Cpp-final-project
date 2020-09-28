@@ -2,9 +2,6 @@
 #define GRAPHICWIDGET_H
 
 #include <QWidget>
-#include <vector>
-#include "Atom.h"
-#include "Residue.h"
 
 class GraphicWidget : public QWidget
 {
@@ -14,12 +11,6 @@ public:
     // constructors
     GraphicWidget(QWidget* parent);
 
-    // open & read PDB file
-    bool readPdbFile(void);
-
-    // set residues
-    bool setResidues(void);
-
 protected:
     // add graphic & text
     void paintEvent(QPaintEvent* p_event);
@@ -28,30 +19,17 @@ protected:
 
 private slots:
     // actions on button push
-    void hideGraphic(void);
-    void showGraphic(void);
-    void openFile(void);
+    void clickHideGraphic(void);
+    void clickShowGraphic(void);
+    void clickOpenFile(void);
 
 private:
-    // HELPER METHODS
-
-    bool emplaceResidue(int atomsId, int firstAtom);
-
-    // ------------------------------------
-
-    // PDB file name
-    QString fileName {"No file"};
-
-    // atom & residue containers
-    std::vector<Atom>       atoms;
-    std::vector<Residue>    residues;
+    // rectangle size
+    static constexpr auto rectWidth {18.0};
+    static constexpr auto rectHeight {20.0};
 
     // selected residue
     int selectedResidue {-1};
-
-    // rectangle size
-    double rectWidth {18.0};
-    double rectHeight {20.0};
 
     // display shortcuts of residues
     bool displayShortcuts {true};

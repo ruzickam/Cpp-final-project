@@ -6,11 +6,6 @@
 class Atom
 {
 public:
-    // record types
-    static constexpr auto RECORD_UNKNOWN {0};
-    static constexpr auto RECORD_ATOM {1};
-    static constexpr auto RECORD_HEATM {2};
-
     // constructors
 
     // getters
@@ -18,11 +13,14 @@ public:
     std::string getResidueName(void) const;
 
     // manipulation methods
-    bool readLine(const std::string& line, int numLine);
-    bool writeLine(std::ofstream ofile) const;
     bool print(void) const;
 
 private:
+    // record types
+    static constexpr auto RECORD_UNKNOWN {0};
+    static constexpr auto RECORD_ATOM {1};
+    static constexpr auto RECORD_HEATM {2};
+
     // atom data
     int recordType {RECORD_UNKNOWN};
     int atomNumber {0};

@@ -34,7 +34,7 @@ private:
     // residue data
     int atomFirst {0};
     int atomLast {0};
-    std::string residueName {" "};
+    std::string residueName {"   "};
     int residueNumber {0};
 
     // residue rectangle position

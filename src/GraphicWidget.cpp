@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <sstream>
 #include <QPainter>
 #include <QFileDialog>
@@ -179,21 +178,21 @@ void GraphicWidget::mousePressEvent(QMouseEvent* p_event)
 
 // buttons
 
-void GraphicWidget::hideGraphic(void)
+void GraphicWidget::clickHideGraphic(void)
 {
     displayShortcuts = false;
 
     update();
 }
 
-void GraphicWidget::showGraphic(void)
+void GraphicWidget::clickShowGraphic(void)
 {
     displayShortcuts = true;
 
     update();
 }
 
-void GraphicWidget::openFile(void)
+void GraphicWidget::clickOpenFile(void)
 {
     // open PDB file
     QString lastFileName {fileName};
@@ -224,19 +223,4 @@ void GraphicWidget::openFile(void)
     update();
 }
 
-//==============================================================================
-//------------------------------------------------------------------------------
-//==============================================================================
 
-// HELPER METHODS
-
-void GraphicWidget::emplaceResidue(int atomsId, int firstAtom){
-
-    residues.emplace_back();
-
-    residues.back().setResidueNumber(atoms[atomsId].getResidueNumber());
-    residues.back().setResidueName(atoms[atomsId].getResidueName());
-
-    residues.back().setAtomLast(atomsId);
-    residues.back().setAtomFirst(firstAtom);
-}

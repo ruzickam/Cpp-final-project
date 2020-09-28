@@ -2,7 +2,6 @@
 #define APPLICATION_H
 
 #include <QApplication>
-#include "GraphicWidget.h"
 
 class Application : public QApplication
 {

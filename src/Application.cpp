@@ -2,6 +2,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include "Application.h"
+#include "GraphicWidget.h"
 
 Application::Application(int &argc, char *argv[]) : QApplication(argc, argv) {}
 
@@ -42,9 +43,9 @@ int Application::run(void) const
     mainWindow.show();
 
     // click signals for buttons
-    QObject::connect(&buttonHide, SIGNAL(clicked()), &graphicWidget, SLOT(hideGraphic()));
-    QObject::connect(&buttonShow, SIGNAL(clicked()), &graphicWidget, SLOT(showGraphic()));
-    QObject::connect(&buttonOpenFile, SIGNAL(clicked()), &graphicWidget, SLOT(openFile()));
+    QObject::connect(&buttonHide, SIGNAL(clicked()), &graphicWidget, SLOT(clickHideGraphic()));
+    QObject::connect(&buttonShow, SIGNAL(clicked()), &graphicWidget, SLOT(clickShowGraphic()));
+    QObject::connect(&buttonOpenFile, SIGNAL(clicked()), &graphicWidget, SLOT(clickOpenFile()));
 
     return QApplication::exec();
 }
