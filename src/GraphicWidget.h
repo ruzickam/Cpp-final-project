@@ -32,7 +32,13 @@ private slots:
     void showGraphic(void);
     void openFile(void);
 
-private:   
+private:
+    // HELPER METHODS
+
+    bool emplaceResidue(int atomsId, int firstAtom);
+
+    // ------------------------------------
+
     // PDB file name
     QString fileName {"No file"};
 

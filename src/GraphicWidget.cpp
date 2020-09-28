@@ -64,15 +64,10 @@ bool GraphicWidget::setResidues(void)
 
     for(auto i {0}; i < atomsSize - 1; ++i) {
 
-        if ( atoms[i].getResidueNumber() != atoms[i+1].getResidueNumber() ){  // distinguish between two different residue
+        // distinguish between two different residue
+        if ( atoms[i].getResidueNumber() != atoms[i+1].getResidueNumber() ){
 
-            residues.emplace_back();
-
-            residues.back().setResidueNumber(atoms[i].getResidueNumber());
-            residues.back().setResidueName(atoms[i].getResidueName());
-
-            residues.back().setAtomLast(i);
-            residues.back().setAtomFirst(firstAtom);
+            emplaceResidue(i, firstAtom);
 
             firstAtom = i + 1;
         }
@@ -80,13 +75,7 @@ bool GraphicWidget::setResidues(void)
         // last atom
         if ( i + 2 == atomsSize ){
 
-            residues.emplace_back();
-
-            residues.back().setResidueNumber(atoms[i+1].getResidueNumber());
-            residues.back().setResidueName(atoms[i+1].getResidueName());
-
-            residues.back().setAtomLast(i+1);
-            residues.back().setAtomFirst(firstAtom);
+            emplaceResidue(i+1, firstAtom);
         }
     }
 
@@ -145,7 +134,7 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
         } else {
             // set x position
             xPos = xPos + rectWidth;
-            column++;
+            ++column;
         }
     }
 
@@ -165,7 +154,7 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
         residueDescription = ss.str();
 
         painter.setPen(pen1);
-        painter.drawText(10, height()-10, residueDescription.c_str());
+        painter.drawText(10, height() - 10, residueDescription.c_str());
     }
 
 
@@ -193,12 +182,14 @@ void GraphicWidget::mousePressEvent(QMouseEvent* p_event)
 void GraphicWidget::hideGraphic(void)
 {
     displayShortcuts = false;
+
     update();
 }
 
 void GraphicWidget::showGraphic(void)
 {
     displayShortcuts = true;
+
     update();
 }
 
@@ -231,4 +222,21 @@ void GraphicWidget::openFile(void)
     setResidues();
 
     update();
+}
+
+//==============================================================================
+//------------------------------------------------------------------------------
+//==============================================================================
+
+// HELPER METHODS
+
+void GraphicWidget::emplaceResidue(int atomsId, int firstAtom){
+
+    residues.emplace_back();
+
+    residues.back().setResidueNumber(atoms[atomsId].getResidueNumber());
+    residues.back().setResidueName(atoms[atomsId].getResidueName());
+
+    residues.back().setAtomLast(atomsId);
+    residues.back().setAtomFirst(firstAtom);
 }
