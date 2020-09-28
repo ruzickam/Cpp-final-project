@@ -26,7 +26,7 @@ bool GraphicWidget::readPdbFile(void)
 
     std::string line;
     std::string recordName;
-    int numLine {1};
+    auto numLine {1};
 
     while ( !ifile.eof() ){
         getline(ifile,line);
@@ -34,9 +34,8 @@ bool GraphicWidget::readPdbFile(void)
             recordName = line.substr(0, 6);
             if ( recordName == "ATOM  " ||
                  recordName == "HETATM") {
-                Atom atom;
-                atom.readLine(line,numLine);
-                atoms.push_back(atom);
+                atoms.emplace_back();
+                atoms.back().readLine(line,numLine);
             } else {
                 std::cout << "Warning: Line (" << numLine << ") does not contain either ATOM or HETATM record" << std::endl;
             }
@@ -60,22 +59,20 @@ bool GraphicWidget::readPdbFile(void)
 
 bool GraphicWidget::setResidues(void)
 {
-    int firstAtom {0};                                          // index of the first atom in a residue
-    const int atomsSize {static_cast<int>(atoms.size())};       // atoms vector size
+    auto firstAtom {0};                                          // index of the first atom in a residue
+    const auto atomsSize {static_cast<int>(atoms.size())};       // atoms vector size
 
     for(auto i {0}; i < atomsSize - 1; ++i) {
 
         if ( atoms[i].getResidueNumber() != atoms[i+1].getResidueNumber() ){  // distinguish between two different residue
 
-            Residue residue;
+            residues.emplace_back();
 
-            residue.setResidueNumber(atoms[i].getResidueNumber());
-            residue.setResidueName(atoms[i].getResidueName());
+            residues.back().setResidueNumber(atoms[i].getResidueNumber());
+            residues.back().setResidueName(atoms[i].getResidueName());
 
-            residue.setAtomLast(i);
-            residue.setAtomFirst(firstAtom);
-
-            residues.push_back(residue);
+            residues.back().setAtomLast(i);
+            residues.back().setAtomFirst(firstAtom);
 
             firstAtom = i + 1;
         }
@@ -83,15 +80,13 @@ bool GraphicWidget::setResidues(void)
         // last atom
         if ( i + 2 == atomsSize ){
 
-            Residue residue;
+            residues.emplace_back();
 
-            residue.setResidueNumber(atoms[i+1].getResidueNumber());
-            residue.setResidueName(atoms[i+1].getResidueName());
+            residues.back().setResidueNumber(atoms[i+1].getResidueNumber());
+            residues.back().setResidueName(atoms[i+1].getResidueName());
 
-            residue.setAtomLast(i+1);
-            residue.setAtomFirst(firstAtom);
-
-            residues.push_back(residue);
+            residues.back().setAtomLast(i+1);
+            residues.back().setAtomFirst(firstAtom);
         }
     }
 
@@ -124,12 +119,12 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
 
     // print symbol of residues
     painter.setFont(font1);
-    int column {0};
-    int xPos {10};  // start position of the first residue
-    int yPos {56};  // start position of the first residue
-    int r {0};
-    int g {0};
-    int b {0};
+    auto column {0};
+    auto xPos {10};  // start position of the first residue
+    auto yPos {56};  // start position of the first residue
+    auto r {0};
+    auto g {0};
+    auto b {0};
     for(auto& i : residues) {
         // draw rectangle
         std::tie(r, g, b) = i.getColorRgb();
@@ -178,7 +173,7 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
 
 void GraphicWidget::mousePressEvent(QMouseEvent* p_event)
 {
-    const int residuesSize {static_cast<int>(residues.size())};   // atoms vector size
+    const auto residuesSize {static_cast<int>(residues.size())};   // atoms vector size
 
     for(auto i {0}; i < residuesSize; ++i) {
         if ( ( p_event->x() > residues[i].getPosX() && p_event->x() < ( residues[i].getPosX() + rectWidth ) ) && ( p_event->y() > residues[i].getPosY() && p_event->y() < ( residues[i].getPosY() + rectHeight ) ) ){
@@ -224,7 +219,9 @@ void GraphicWidget::openFile(void)
 
     // clear all previous data
     residues.clear();
+    residues.shrink_to_fit();
     atoms.clear();
+    atoms.shrink_to_fit();
     selectedResidue = -1;
 
     // read PDB file

@@ -7,9 +7,9 @@ class Atom
 {
 public:
     // record types
-    static constexpr int RECORD_UNKNOWN {0};
-    static constexpr int RECORD_ATOM {1};
-    static constexpr int RECORD_HEATM {2};
+    static constexpr auto RECORD_UNKNOWN {0};
+    static constexpr auto RECORD_ATOM {1};
+    static constexpr auto RECORD_HEATM {2};
 
     // constructors
 
