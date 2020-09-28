@@ -60,9 +60,10 @@ bool GraphicWidget::readPdbFile(void)
 
 bool GraphicWidget::setResidues(void)
 {
-    int firstAtom {0};                  // index of the first atom in a residue
+    int firstAtom {0};                                          // index of the first atom in a residue
+    const int atomsSize {static_cast<int>(atoms.size())};       // atoms vector size
 
-    for(auto i {0}; static_cast<std::vector<int>::size_type>(i) < atoms.size() - 1; ++i) {
+    for(auto i {0}; i < atomsSize - 1; ++i) {
 
         if ( atoms[i].getResidueNumber() != atoms[i+1].getResidueNumber() ){  // distinguish between two different residue
 
@@ -80,7 +81,7 @@ bool GraphicWidget::setResidues(void)
         }
 
         // last atom
-        if ( static_cast<std::vector<int>::size_type>(i+2) == atoms.size() ){
+        if ( i + 2 == atomsSize ){
 
             Residue residue;
 
@@ -129,17 +130,17 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
     int r {0};
     int g {0};
     int b {0};
-    for(auto i {0}; static_cast<std::vector<int>::size_type>(i) < residues.size(); ++i) {
+    for(auto& i : residues) {
         // draw rectangle
-        std::tie(r, g, b) = residues[i].getColorRgb();
+        std::tie(r, g, b) = i.getColorRgb();
         painter.setBrush(QColor(r,g,b));
         painter.setPen(Qt::NoPen);
         painter.drawRect(xPos, yPos, rectWidth, rectHeight);
-        residues[i].setPosXY(xPos, yPos);
+        i.setPosXY(xPos, yPos);
         // print symbol
         if ( displayShortcuts == true ){
             painter.setPen(pen1);
-            painter.drawText(xPos + (rectWidth * 0.28), yPos + (rectHeight * 0.78), QChar(residues[i].getResidueChar()));
+            painter.drawText(xPos + (rectWidth * 0.28), yPos + (rectHeight * 0.78), QChar(i.getResidueChar()));
         }
         // check column
         if ( column == 19 ){
@@ -177,7 +178,9 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
 
 void GraphicWidget::mousePressEvent(QMouseEvent* p_event)
 {
-    for(auto i {0}; static_cast<std::vector<int>::size_type>(i) < residues.size(); i++) {
+    const int residuesSize {static_cast<int>(residues.size())};   // atoms vector size
+
+    for(auto i {0}; i < residuesSize; ++i) {
         if ( ( p_event->x() > residues[i].getPosX() && p_event->x() < ( residues[i].getPosX() + rectWidth ) ) && ( p_event->y() > residues[i].getPosY() && p_event->y() < ( residues[i].getPosY() + rectHeight ) ) ){
             selectedResidue = i;
         }
@@ -214,6 +217,7 @@ void GraphicWidget::openFile(void)
         return;
     }
 
+    // display file name
     std::string strFileName;
     strFileName = fileName.toLatin1().constData();
     std::cout << "File name: " << strFileName << std::endl;
