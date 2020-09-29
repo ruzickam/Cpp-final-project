@@ -17,6 +17,14 @@ bool PdbFile::readFile(const QString& dialogFileName)
     // copy file name
     fileName = dialogFileName;
 
+    // print file name
+    printFileName();
+
+    // clear all previous data
+    clearVectors();
+
+    // ---START: FILE MANIPULATION-------------------
+
     // file definition
     std::ifstream ifile;
 
@@ -24,27 +32,24 @@ bool PdbFile::readFile(const QString& dialogFileName)
     if ( openFile(ifile) == false )
         return false;
 
-    // print file name
-    printFileName();
-
-    // clear all previous data
-    clearVectors();
-
     // read lines
+    auto numLine {1};
     while ( !ifile.eof() ){
-        readLine(ifile);
+        readLine(ifile, numLine);
     }
 
     // close the file
     ifile.close();
 
+    // ---END: FILE MANIPULATION-------------------
+
+    // set residues
+    setResidues();
+
     // print atoms
     for(auto const& i : atoms) {
         i.print();
     }
-
-    // set residues
-    setResidues();
 
     // print residues
     for(auto const& i : residues) {
@@ -96,11 +101,10 @@ bool PdbFile::openFile(std::ifstream& ifile)
 //---HELPER METHODS - READ------------------------------------------------------
 //==============================================================================
 
-void PdbFile::readLine(std::ifstream& ifile)
+void PdbFile::readLine(std::ifstream& ifile, int& numLine)
 {
     std::string line;
     std::string recordName;
-    auto numLine {1};
 
     std::getline(ifile, line);
 
@@ -126,8 +130,8 @@ void PdbFile::readLine(std::ifstream& ifile)
 void PdbFile::setResidues(void)
 {
     auto firstAtom {0};         // index of the first atom in a residue
-    auto xPos {10};             // start position of the first residue
-    auto yPos {56};             // start position of the first residue
+    auto xPos {10.0};             // start position of the first residue
+    auto yPos {56.0};             // start position of the first residue
     auto column {0};            // start column number
     const auto atomsSize {static_cast<int>(atoms.size())};       // atoms vector size
 

@@ -31,7 +31,7 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
     painter.drawText(10, 30, pdbFile.getFileName());
 
     // paint symbol of residues
-    painter.setFont(font1);
+    //painter.setFont(font1);
     auto r {0};
     auto g {0};
     auto b {0};

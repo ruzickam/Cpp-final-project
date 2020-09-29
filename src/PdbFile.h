@@ -27,7 +27,7 @@ private:
     bool openFile(std::ifstream& ifile);
 
     // read
-    void readLine(std::ifstream& ifile);
+    void readLine(std::ifstream& ifile, int& numLine);
 
     // set
     void setResidues(void);
