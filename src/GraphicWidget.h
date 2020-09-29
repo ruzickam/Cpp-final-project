@@ -34,8 +34,8 @@ private slots:
 private:
     // HELPERS
     QString openFileDialog(void);
-    void paintAllResidues(int residuesSize, QPainter& painter, const QPen& pen1) const;
-    void paintSelectedResidue(int residuesSize, QPainter& painter, const QPen& pen2) const;
+    void paintAllResidues(int residuesSize);
+    void paintSelectedResidue(int residuesSize);
 
     // PDB File
     PdbFile pdbFile;

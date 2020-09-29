@@ -19,22 +19,14 @@ GraphicWidget::GraphicWidget(QWidget* parent) : QWidget(parent) {}
 
 void GraphicWidget::paintEvent(QPaintEvent* p_event)
 {
-    // setup painter, pens, font
-    QPainter painter {this};
-    QPen pen1 {Qt::black, 4};
-    QPen pen2 {Qt::red, 3};
-    QFont font1 {"Helvetica", 9, 0, false};
-    painter.setFont(font1);
-    painter.setPen(pen1);
-
     // get residues vector size
     const auto residuesSize {pdbFile.getResiduesSize()};   // vector size
 
     // paint all residues
-    paintAllResidues(residuesSize, painter, pen1);
+    paintAllResidues(residuesSize);
 
     // paint only selected
-    paintSelectedResidue(residuesSize, painter, pen2);
+    paintSelectedResidue(residuesSize);
 }
 
 //------------------------------------------------------------------------------
@@ -108,8 +100,18 @@ QString GraphicWidget::openFileDialog(void)
 
 //------------------------------------------------------------------------------
 
-void GraphicWidget::paintAllResidues(int residuesSize, QPainter& painter, const QPen& pen1) const
+void GraphicWidget::paintAllResidues(int residuesSize)
 {
+    // setup painter, pens, font
+    QPainter painter {this};
+    QPen pen1 {Qt::black, 4};
+    QPen pen2 {Qt::red, 3};
+    QFont font1 {"Helvetica", 9, 0, false};
+
+    // initial setup
+    painter.setFont(font1);
+    painter.setPen(pen1);
+
     // draw file name
     painter.drawText(10, 10, "File:");
     painter.drawText(10, 30, pdbFile.getFileName());
@@ -138,9 +140,19 @@ void GraphicWidget::paintAllResidues(int residuesSize, QPainter& painter, const 
 
 //------------------------------------------------------------------------------
 
-void GraphicWidget::paintSelectedResidue(int residuesSize, QPainter& painter, const QPen& pen2) const
+void GraphicWidget::paintSelectedResidue(int residuesSize)
 {
     if( ( selectedResidue < residuesSize ) && ( selectedResidue > -1 ) ){ // range check
+
+        // setup painter, pens, font
+        QPainter painter {this};
+        QPen pen1 {Qt::black, 4};
+        QPen pen2 {Qt::red, 3};
+        QFont font1 {"Helvetica", 9, 0, false};
+
+        // initial setup
+        painter.setFont(font1);
+        painter.setPen(pen1);
 
         // draw text for res description
         std::string residueDescription;

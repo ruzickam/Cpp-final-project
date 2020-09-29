@@ -29,14 +29,16 @@ bool PdbFile::readFile(const QString& dialogFileName)
     std::ifstream ifile;
 
     // open file
-    if ( openFile(ifile) == false )
+    ifile.open( fileName.toLatin1().constData() ); // because of this cannot use const &
+    if( ifile.fail() ){
+        std::cout << "ERROR: unable to open file!" << std::endl;
         return false;
+    }
+    std::cout << "Opening file..." << std::endl;
 
     // read lines
-    auto numLine {1};
-    while ( !ifile.eof() ){
-        readLine(ifile, numLine);
-    }
+    if ( ! readLines(ifile) )
+        return false;
 
     // close the file
     ifile.close();
@@ -82,45 +84,43 @@ int PdbFile::getResiduesSize(void) const
 //---HELPER METHODS - OPEN------------------------------------------------------
 //==============================================================================
 
-bool PdbFile::openFile(std::ifstream& ifile)
-{
-    ifile.open( fileName.toLatin1().constData() ); // because of this cannot use const &
-
-    // fail
-    if( ifile.fail() ){
-        std::cout << "ERROR: unable to open file!" << std::endl;
-        return false;
-    }
-
-    // success
-    std::cout << "Opening file..." << std::endl;
-    return true;
-}
 
 //==============================================================================
 //---HELPER METHODS - READ------------------------------------------------------
 //==============================================================================
 
-void PdbFile::readLine(std::ifstream& ifile, int& numLine)
+bool PdbFile::readLines(std::ifstream& ifile)
 {
+    // check if the file is opened
+    if( ifile.fail() || ! ifile.is_open() ){
+        std::cout << "ERROR: reading file failed!" << std::endl;
+        return false;
+    }
+
+    auto numLine {1};
     std::string line;
     std::string recordName;
 
-    std::getline(ifile, line);
+    while ( !ifile.eof() ){
 
-    if ( line.length() >= 6 ){
+        std::getline(ifile, line);
 
-        recordName = line.substr(0, 6);
+        if ( line.length() >= 6 ){
 
-        if ( recordName == "ATOM  " || recordName == "HETATM") {
-            atoms.emplace_back();
-            if ( atoms.back().setValues(line, numLine) == false )
-                std::cout << "Warning: the line (" << numLine << ") was skipped due to line corruption!" << std::endl;
-        } else {
-            std::cout << "Warning: Line (" << numLine << ") does not contain either ATOM or HETATM record" << std::endl;
+            recordName = line.substr(0, 6);
+
+            if ( recordName == "ATOM  " || recordName == "HETATM") {
+                atoms.emplace_back();
+                if ( atoms.back().setValues(line, numLine) == false )
+                    std::cout << "Warning: the line (" << numLine << ") was skipped due to line corruption!" << std::endl;
+            } else {
+                std::cout << "Warning: Line (" << numLine << ") does not contain either ATOM or HETATM record" << std::endl;
+            }
+            ++numLine;
         }
-        ++numLine;
     }
+
+    return true;
 }
 
 //==============================================================================

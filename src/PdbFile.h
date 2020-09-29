@@ -24,10 +24,9 @@ private:
     // HELPER METHODS
 
     // open
-    bool openFile(std::ifstream& ifile);
 
     // read
-    void readLine(std::ifstream& ifile, int& numLine);
+    bool readLines(std::ifstream& ifile);
 
     // set
     void setResidues(void);
