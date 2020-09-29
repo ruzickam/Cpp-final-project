@@ -47,12 +47,12 @@ bool PdbFile::readFile(const QString& dialogFileName)
     setResidues();
 
     // print atoms
-    for(auto const& i : atoms) {
+    for(const auto& i : atoms) {
         i.print();
     }
 
     // print residues
-    for(auto const& i : residues) {
+    for(const auto& i : residues) {
         i.print();
     }
 
@@ -130,8 +130,8 @@ void PdbFile::readLine(std::ifstream& ifile, int& numLine)
 void PdbFile::setResidues(void)
 {
     auto firstAtom {0};         // index of the first atom in a residue
-    auto xPos {10.0};             // start position of the first residue
-    auto yPos {56.0};             // start position of the first residue
+    auto xPos {10.0};           // start position of the first residue
+    auto yPos {56.0};           // start position of the first residue
     auto column {0};            // start column number
     const auto atomsSize {static_cast<int>(atoms.size())};       // atoms vector size
 
@@ -187,8 +187,6 @@ void PdbFile::printFileName(void) const
 void PdbFile::clearVectors(void)
 {
     atoms.clear();
-    atoms.shrink_to_fit();
 
     residues.clear();
-    residues.shrink_to_fit();
 }
