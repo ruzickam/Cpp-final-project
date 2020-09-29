@@ -10,11 +10,7 @@ public:
     // constructors
 
     // setters
-    bool setAtomFirst(int argAtomFirst);
-    bool setAtomLast(int argAtomLast);
-    bool setResidueName(const std::string& argResidueName);
-    bool setResidueNumber(int argResidueNumber);
-    bool setPosXY(double argX, double argY);
+    void setValues(int argAtomFirst, int argAtomLast, const std::string& argResidueName, int argResidueNumber, double argPosX, double argPosY);
 
     // getters
     int getAtomFirst(void) const;
@@ -27,8 +23,8 @@ public:
     double getPosY(void) const;
     int getAtomsCount(void) const;
 
-    // manipulation methods
-    bool print(void) const;
+    // prints
+    void print(void) const;
 
 private:
     // residue data

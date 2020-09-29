@@ -4,10 +4,14 @@
 #include "Application.h"
 #include "GraphicWidget.h"
 
+//==============================================================================
+//---CONSTRUCTORS---------------------------------------------------------------
+//==============================================================================
+
 Application::Application(int &argc, char *argv[]) : QApplication(argc, argv) {}
 
 //==============================================================================
-//------------------------------------------------------------------------------
+//---EVENT LOOP-----------------------------------------------------------------
 //==============================================================================
 
 int Application::run(void) const
@@ -47,5 +51,15 @@ int Application::run(void) const
     QObject::connect(&buttonShow, SIGNAL(clicked()), &graphicWidget, SLOT(clickShowGraphic()));
     QObject::connect(&buttonOpenFile, SIGNAL(clicked()), &graphicWidget, SLOT(clickOpenFile()));
 
-    return QApplication::exec();
+    auto ret {0};
+    try {
+        ret = QApplication::exec();
+    } catch (const std::bad_alloc&){
+        // clean up here, e.g. save the session
+        // and close all config files.
+
+        return EXIT_FAILURE;
+    }
+
+    return ret;
 }

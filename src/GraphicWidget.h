@@ -2,6 +2,7 @@
 #define GRAPHICWIDGET_H
 
 #include <QWidget>
+#include <PdbFile.h>
 
 class GraphicWidget : public QWidget
 {
@@ -11,22 +12,31 @@ public:
     // constructors
     GraphicWidget(QWidget* parent);
 
+    // rectangle size
+    static constexpr auto rectWidth {18.0};
+    static constexpr auto rectHeight {20.0};
+
 protected:
+    // EVENTS
+
     // add graphic & text
     void paintEvent(QPaintEvent* p_event);
+
     // mouse action
     void mousePressEvent(QMouseEvent* p_event);
 
 private slots:
-    // actions on button push
+    // BUTTONS
     void clickHideGraphic(void);
     void clickShowGraphic(void);
     void clickOpenFile(void);
 
 private:
-    // rectangle size
-    static constexpr auto rectWidth {18.0};
-    static constexpr auto rectHeight {20.0};
+    // HELPERS
+    QString openFileDialog(void);
+
+    // PDB File
+    PdbFile pdbFile;
 
     // selected residue
     int selectedResidue {-1};

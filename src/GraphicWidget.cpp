@@ -1,93 +1,18 @@
 #include <iostream>
 #include <sstream>
 #include <QPainter>
-#include <QFileDialog>
 #include <QMouseEvent>
+#include <QFileDialog>
 #include "GraphicWidget.h"
+
+//==============================================================================
+//---CONSTRUCTORS---------------------------------------------------------------
+//==============================================================================
 
 GraphicWidget::GraphicWidget(QWidget* parent) : QWidget(parent) {}
 
 //==============================================================================
-//------------------------------------------------------------------------------
-//==============================================================================
-
-bool GraphicWidget::readPdbFile(void)
-{
-    std::cout << std::endl << "Reading PDB file..." << std::endl;
-
-    std::ifstream ifile;
-
-    ifile.open( fileName.toLatin1().constData() );
-    if( ifile.fail() ){
-        std::cout << "ERROR: unable to open input file!" << std::endl;
-        return(false);
-    }
-
-    std::string line;
-    std::string recordName;
-    auto numLine {1};
-
-    while ( !ifile.eof() ){
-        getline(ifile,line);
-        if ( line.length() >= 6 ){
-            recordName = line.substr(0, 6);
-            if ( recordName == "ATOM  " ||
-                 recordName == "HETATM") {
-                atoms.emplace_back();
-                atoms.back().readLine(line,numLine);
-            } else {
-                std::cout << "Warning: Line (" << numLine << ") does not contain either ATOM or HETATM record" << std::endl;
-            }
-            ++numLine;
-        }
-    }
-
-    ifile.close();
-
-    // print atoms
-    for(auto const& i : atoms) {
-        i.print();
-    }
-
-    return(true);
-}
-
-//==============================================================================
-//------------------------------------------------------------------------------
-//==============================================================================
-
-bool GraphicWidget::setResidues(void)
-{
-    auto firstAtom {0};                                          // index of the first atom in a residue
-    const auto atomsSize {static_cast<int>(atoms.size())};       // atoms vector size
-
-    for(auto i {0}; i < atomsSize - 1; ++i) {
-
-        // distinguish between two different residue
-        if ( atoms[i].getResidueNumber() != atoms[i+1].getResidueNumber() ){
-
-            emplaceResidue(i, firstAtom);
-
-            firstAtom = i + 1;
-        }
-
-        // last atom
-        if ( i + 2 == atomsSize ){
-
-            emplaceResidue(i+1, firstAtom);
-        }
-    }
-
-    // print residues
-    for(auto const& i : residues) {
-        i.print();
-    }
-
-    return(true);
-}
-
-//==============================================================================
-//------------------------------------------------------------------------------
+//---EVENTS---------------------------------------------------------------------
 //==============================================================================
 
 // paint & mouse events
@@ -99,128 +24,120 @@ void GraphicWidget::paintEvent(QPaintEvent* p_event)
     QPen pen2 {Qt::red, 3};
     QFont font1 {"Helvetica", 9, 0, false};
 
-    // file name
+    // paint file name
     painter.setPen(pen1);
     painter.setFont(font1);
     painter.drawText(10, 10, "File:");
-    painter.drawText(10, 30, fileName);
+    painter.drawText(10, 30, pdbFile.getFileName());
 
-    // print symbol of residues
+    // paint symbol of residues
     painter.setFont(font1);
-    auto column {0};
-    auto xPos {10};  // start position of the first residue
-    auto yPos {56};  // start position of the first residue
     auto r {0};
     auto g {0};
     auto b {0};
-    for(auto& i : residues) {
+    const auto residuesSize {pdbFile.getResiduesSize()};   // vector size
+
+    for(auto i {0}; i < residuesSize; ++i) {
+
         // draw rectangle
-        std::tie(r, g, b) = i.getColorRgb();
+        std::tie(r, g, b) = pdbFile.getResidue(i).getColorRgb();
         painter.setBrush(QColor(r,g,b));
         painter.setPen(Qt::NoPen);
-        painter.drawRect(xPos, yPos, rectWidth, rectHeight);
-        i.setPosXY(xPos, yPos);
-        // print symbol
+        painter.drawRect( pdbFile.getResidue(i).getPosX(), pdbFile.getResidue(i).getPosY(), rectWidth, rectHeight);
+
+        // paint symbol
         if ( displayShortcuts == true ){
             painter.setPen(pen1);
-            painter.drawText(xPos + (rectWidth * 0.28), yPos + (rectHeight * 0.78), QChar(i.getResidueChar()));
+            painter.drawText( pdbFile.getResidue(i).getPosX() + (rectWidth * 0.28),\
+                              pdbFile.getResidue(i).getPosY() + (rectHeight * 0.78), QChar(pdbFile.getResidue(i).getResidueChar()));
         }
-        // check column
-        if ( column == 19 ){
-            yPos = yPos + rectHeight + 8;   // 8 = space between rows
-            xPos = xPos - (19*rectWidth);
-            column = 0;
-        } else {
-            // set x position
-            xPos = xPos + rectWidth;
-            ++column;
-        }
+
     }
 
     // add red rect & desc for selected residue
-    if( ( residues.size() > 0 ) && ( selectedResidue > -1 ) ){
+    if( ( residuesSize > 0 ) && ( selectedResidue > -1 ) ){
         painter.setBrush(Qt::NoBrush);
         painter.setPen(pen2);
-        painter.drawRect(residues[selectedResidue].getPosX(), residues[selectedResidue].getPosY(), rectWidth, rectHeight);
+        painter.drawRect(pdbFile.getResidue(selectedResidue).getPosX(), pdbFile.getResidue(selectedResidue).getPosY(), rectWidth, rectHeight);
 
         std::string residueDescription;
         std::ostringstream ss;
         ss << "Residue: ";
-        ss << residues[selectedResidue].getResidueName();
-        ss << residues[selectedResidue].getResidueNumber();
+        ss << pdbFile.getResidue(selectedResidue).getResidueName();
+        ss << pdbFile.getResidue(selectedResidue).getResidueNumber();
         ss << "     Number of atoms: ";
-        ss << residues[selectedResidue].getAtomsCount();
+        ss << pdbFile.getResidue(selectedResidue).getAtomsCount();
         residueDescription = ss.str();
 
         painter.setPen(pen1);
         painter.drawText(10, height() - 10, residueDescription.c_str());
     }
-
-
 }
+
+//------------------------------------------------------------------------------
 
 void GraphicWidget::mousePressEvent(QMouseEvent* p_event)
 {
-    const auto residuesSize {static_cast<int>(residues.size())};   // atoms vector size
+    const auto residuesSize {pdbFile.getResiduesSize()};   // vector size
 
+    // select the residue based on click position
     for(auto i {0}; i < residuesSize; ++i) {
-        if ( ( p_event->x() > residues[i].getPosX() && p_event->x() < ( residues[i].getPosX() + rectWidth ) ) && ( p_event->y() > residues[i].getPosY() && p_event->y() < ( residues[i].getPosY() + rectHeight ) ) ){
+
+        if ( ( p_event->x() > pdbFile.getResidue(i).getPosX() && p_event->x() < ( pdbFile.getResidue(i).getPosX() + rectWidth ) ) &&\
+             ( p_event->y() > pdbFile.getResidue(i).getPosY() && p_event->y() < ( pdbFile.getResidue(i).getPosY() + rectHeight ) ) ){
+
             selectedResidue = i;
         }
     }
 
+    // re-paint the residues
     update();
 }
 
 //==============================================================================
-//------------------------------------------------------------------------------
+//---BUTTONS--------------------------------------------------------------------
 //==============================================================================
-
-// buttons
 
 void GraphicWidget::clickHideGraphic(void)
 {
     displayShortcuts = false;
 
+    // re-paint the residues
     update();
 }
+
+//------------------------------------------------------------------------------
 
 void GraphicWidget::clickShowGraphic(void)
 {
     displayShortcuts = true;
 
+    // re-paint the residues
     update();
 }
+
+//------------------------------------------------------------------------------
 
 void GraphicWidget::clickOpenFile(void)
 {
-    // open PDB file
-    QString lastFileName {fileName};
-    fileName = QFileDialog::getOpenFileName(this, "Open", ".");
-    if( fileName.isEmpty() ){
-        fileName = lastFileName;
+    // read a file
+    if ( pdbFile.readFile( openFileDialog() ) == false ){
         return;
     }
 
-    // display file name
-    std::string strFileName;
-    strFileName = fileName.toLatin1().constData();
-    std::cout << "File name: " << strFileName << std::endl;
-
-    // clear all previous data
-    residues.clear();
-    residues.shrink_to_fit();
-    atoms.clear();
-    atoms.shrink_to_fit();
+    // re-paint the residues
     selectedResidue = -1;
-
-    // read PDB file
-    readPdbFile();
-
-    // set residues
-    setResidues();
-
     update();
 }
 
+//==============================================================================
+//---HELPERS--------------------------------------------------------------------
+//==============================================================================
 
+
+QString GraphicWidget::openFileDialog(void)
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Open", "."); // "this" must be a QWidget
+
+    return fileName;
+}

@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <fstream>
-#include <string>
 #include <QString>
 #include "Atom.h"
 #include "Residue.h"
@@ -11,18 +10,35 @@
 class PdbFile
 {
 public:
-    // open & read PDB file
-    bool readPdbFile(void);
+    // constructors
 
-    // set residues
-    bool setResidues(void);
+    // open and read PDB file
+    bool readFile(const QString& dialogFileName);
+
+    // getters
+    QString getFileName(void) const;
+    Residue getResidue(int index) const;
+    int getResiduesSize(void) const;
 
 private:
     // HELPER METHODS
 
-    bool readLine(const std::string& line, int numLine);
-    bool writeLine(std::ofstream ofile) const;
-    void emplaceResidue(int atomsId, int firstAtom);
+    // open
+    bool openFile(std::ifstream& ifile);
+
+    // read
+    void readLine(std::ifstream& ifile);
+
+    // set
+    void setResidues(void);
+
+    // write
+
+    // print
+    void printFileName(void) const;
+
+    // clear
+    void clearVectors(void);
 
     // ----------------------------------------------
 

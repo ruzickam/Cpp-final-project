@@ -2,130 +2,120 @@
 #include "Residue.h"
 
 //==============================================================================
-//------------------------------------------------------------------------------
+//---SETTERS--------------------------------------------------------------------
 //==============================================================================
 
-// setters (returns 0 if successful)
-bool Residue::setAtomFirst(int argAtomFirst)
+void Residue::setValues(int argAtomFirst, int argAtomLast, const std::string& argResidueName, int argResidueNumber, double argPosX, double argPosY)
 {
     atomFirst = argAtomFirst;
-    return(true);
-}
-
-bool Residue::setAtomLast(int argAtomLast)
-{
     atomLast = argAtomLast;
-    return(true);
-}
 
-bool Residue::setResidueName(const std::string& argResidueName)
-{
     residueName = argResidueName;
-    return(true);
-}
-
-bool Residue::setResidueNumber(int argResidueNumber)
-{
     residueNumber = argResidueNumber;
-    return(true);
-}
 
-bool Residue::setPosXY(double argX, double argY)
-{
-    posX = argX;
-    posY = argY;
-    return(true);
+    // set posX, posY
+    posX = argPosX;
+    posY = argPosY;
 }
 
 //==============================================================================
-//------------------------------------------------------------------------------
+//---GETTERS--------------------------------------------------------------------
 //==============================================================================
 
-// getters
 int Residue::getAtomFirst(void) const
 {
-    return( atomFirst );
+    return atomFirst;
 }
+
+//------------------------------------------------------------------------------
 
 int Residue::getAtomLast(void) const
 {
-    return( atomLast );
+    return atomLast;
 }
+
+//------------------------------------------------------------------------------
 
 std::string Residue::getResidueName(void) const
 {
-    return( residueName );
+    return residueName;
 }
+
+//------------------------------------------------------------------------------
 
 int Residue::getResidueNumber(void) const
 {
-    return( residueNumber );
+    return residueNumber;
 }
+
+//------------------------------------------------------------------------------
 
 char Residue::getResidueChar(void) const
 {
     if ( residueName == "ALA" ){
-        return( 'A' );
+        return 'A';
     }
     if ( residueName == "ARG" ){
-        return( 'R' );
+        return 'R';
     }
     if ( residueName == "ASN" ){
-        return( 'N' );
+        return 'N';
     }
     if ( residueName == "ASP" ){
-        return( 'D' );
+        return 'D';
     }
     if ( residueName == "CYS" ){
-        return( 'C' );
+        return 'C';
     }
     if ( residueName == "GLN" ){
-        return( 'Q' );
+        return 'Q';
     }
     if ( residueName == "GLU" ){
-        return( 'E' );
+        return 'E';
     }
     if ( residueName == "GLY" ){
-        return( 'G' );
+        return 'G';
     }
     if ( residueName == "HIS" ){
-        return( 'H' );
+        return 'H';
     }
     if ( residueName == "ILE" ){
-        return( 'I' );
+        return 'I';
     }
     if ( residueName == "LEU" ){
-        return( 'L' );
+        return 'L';
     }
     if ( residueName == "LYS" ){
-        return( 'K' );
+        return 'K';
     }
     if ( residueName == "MET" ){
-        return( 'M' );
+        return 'M';
     }
     if ( residueName == "PHE" ){
-        return( 'F' );
+        return 'F';
     }
     if ( residueName == "PRO" ){
-        return( 'P' );
+        return 'P';
     }
     if ( residueName == "SER" ){
-        return( 'S' );
+        return 'S';
     }
     if ( residueName == "THR" ){
-        return( 'T' );
+        return 'T';
     }
     if ( residueName == "TRP" ){
-        return( 'W' );
+        return 'W';
     }
     if ( residueName == "TYR" ){
-        return( 'Y' );
+        return 'Y';
     }
     if ( residueName == "VAL" ){
-        return( 'V' );
+        return 'V';
     }
-    return( 'X' );
+    return 'X';
 }
+
+//------------------------------------------------------------------------------
 
 std::tuple<int, int, int> Residue::getColorRgb(void) const
 {
@@ -194,28 +184,33 @@ std::tuple<int, int, int> Residue::getColorRgb(void) const
     }
 }
 
+//------------------------------------------------------------------------------
+
 double Residue::getPosX(void) const
 {
-    return( posX );
+    return posX;
 }
+
+//------------------------------------------------------------------------------
 
 double Residue::getPosY(void) const
 {
-    return( posY );
+    return posY;
 }
+
+//------------------------------------------------------------------------------
 
 int Residue::getAtomsCount(void) const
 {
-    return( atomLast - atomFirst + 1 );
+    return atomLast - atomFirst + 1;
 }
 
 //==============================================================================
-//------------------------------------------------------------------------------
+//---PRINTS---------------------------------------------------------------------
 //==============================================================================
 
-bool Residue::print(void) const
+void Residue::print(void) const
 {
     std::cout << "Residue number: " << residueNumber << ", residue name: " << residueName << std::endl;
-    return(true);
 }
 

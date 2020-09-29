@@ -12,8 +12,11 @@ public:
     int getResidueNumber(void) const;
     std::string getResidueName(void) const;
 
-    // manipulation methods
-    bool print(void) const;
+    // setters
+    bool setValues(const std::string& line, int numLine);
+
+    // print
+    void print(void) const;
 
 private:
     // record types

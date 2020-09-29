@@ -11,8 +11,9 @@ public:
     // constructors
     Application(int &argc, char *argv[]);
 
-    // event loop function
+    // event loop
     int run(void) const;
+
 private:
 };
 
