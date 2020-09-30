@@ -34,7 +34,7 @@ void GraphicWidget::paintEvent(QPaintEvent* )
     painter.setFont(font1);
 
     // vector size
-    const auto residuesSize {pdbFile.getResiduesSize()};
+    const auto residuesSize {pdbFile.getResSize()};
 
     // -----------------------------------------------------
 
@@ -49,15 +49,14 @@ void GraphicWidget::paintEvent(QPaintEvent* )
 
 void GraphicWidget::mousePressEvent(QMouseEvent* p_event)
 {
-    const auto residuesSize {pdbFile.getResiduesSize()};   // vector size
+    const auto residuesSize {pdbFile.getResSize()};   // vector size
     auto resPosX {0.0};
     auto resPosY {0.0};
 
     // select the residue based on click position
     for(auto i {0}; i < residuesSize; ++i) {
 
-        resPosX = pdbFile.getResidue(i).getPosX();
-        resPosY = pdbFile.getResidue(i).getPosY();
+        std::tie(resPosX, resPosY) = pdbFile.getResXY(i);
 
         if ( ( p_event->x() > resPosX &&\
                p_event->x() < ( resPosX + rectWidth ) ) &&\
@@ -127,39 +126,35 @@ QString GraphicWidget::openFileDialog(void)
 
 void GraphicWidget::paintAllResidues(int residuesSize, QPainter& painter, const QPen& pen1)
 {
-    // initial setup
+    // 1. ---draw file name---
     painter.setPen(pen1);
+    painter.drawText( 10, 10, "File:" );
+    painter.drawText( 10, 30, pdbFile.getFileName() );
 
-    // draw file name
-    painter.drawText(10, 10, "File:");
-    painter.drawText(10, 30, pdbFile.getFileName());
-
-
-    // paint symbols of residues
+    // 2. ---draw rectangles + symbols---
     auto r {0}, g {0}, b {0};
     auto resPosX {0.0};
     auto resPosY {0.0};
+    auto resChar {'x'};
 
     for(auto i {0}; i < residuesSize; ++i) {
 
-        resPosX = pdbFile.getResidue(i).getPosX();
-        resPosY = pdbFile.getResidue(i).getPosY();
+        // get data
+        std::tie(r, g, b) = pdbFile.getResRgb(i);
+        std::tie(resPosX, resPosY) = pdbFile.getResXY(i);
+        resChar = pdbFile.getResChar(i);
 
         // draw rectangle
-        std::tie(r, g, b) = pdbFile.getResidue(i).getColorRgb();
         painter.setBrush(QColor(r,g,b));
         painter.setPen(Qt::NoPen);
-
         painter.drawRect( resPosX, resPosY, rectWidth, rectHeight );
-
 
         // draw symbol
         if ( displayShortcuts == true ){
             painter.setPen(pen1);
-
             painter.drawText( resPosX + (rectWidth * xTextMultiplier),\
                               resPosY + (rectHeight * yTextMultiplier),\
-                              QChar( pdbFile.getResidue(i).getResidueChar() ) );
+                              QChar( resChar ) );
         }
 
     }
@@ -171,29 +166,32 @@ void GraphicWidget::paintSelectedResidue(int residuesSize, QPainter& painter, co
 {
     if( ( selectedResidue < residuesSize ) && ( selectedResidue > -1 ) ){ // range check
 
-        // initial setup
-        painter.setPen(pen1);
+        // get data
+        auto resPosX {0.0};
+        auto resPosY {0.0};
+        std:: string residueName {""};
+        auto residueNumber {0};
+        auto atomsCount {0};
 
-        // draw text for res description
+        std::tie(resPosX, resPosY) = pdbFile.getResXY(selectedResidue);
+        std::tie(residueName, residueNumber, atomsCount) = pdbFile.getResNameNumCount(selectedResidue);
+
+        // 1. ---draw text for res description---
+        painter.setPen(pen1);      
         std::string residueDescription;
         std::ostringstream ss;
 
-        ss << "Residue: ";
-        ss << pdbFile.getResidue(selectedResidue).getResidueName();
-        ss << pdbFile.getResidue(selectedResidue).getResidueNumber();
-        ss << "     Number of atoms: ";
-        ss << pdbFile.getResidue(selectedResidue).getAtomsCount();
+        ss << "Residue: " << residueName << residueNumber;
+        ss << "     Number of atoms: " << atomsCount;
         residueDescription = ss.str();
 
         painter.drawText(10, height() - 10, residueDescription.c_str());
 
-
-        // draw red rect
+        // 2. ---draw red rect---
         painter.setBrush(Qt::NoBrush);
         painter.setPen(pen2);
 
-        painter.drawRect(pdbFile.getResidue(selectedResidue).getPosX(),\
-                         pdbFile.getResidue(selectedResidue).getPosY(),\
+        painter.drawRect(resPosX, resPosY,\
                          rectWidth, rectHeight );
     }
 }

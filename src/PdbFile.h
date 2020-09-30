@@ -18,8 +18,12 @@ public:
 
     // getters
     QString getFileName(void) const;
-    Residue getResidue(int index) const;
-    int getResiduesSize(void) const;
+    int getResSize(void) const;
+
+    std::tuple<double, double> getResXY(int index) const;
+    std::tuple<int, int, int> getResRgb(int index) const;
+    char getResChar(int index) const;
+    std::tuple<std::string, int, int> getResNameNumCount(int index) const;
 
 private:
     // HELPER METHODS

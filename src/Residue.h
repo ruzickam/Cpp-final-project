@@ -17,11 +17,8 @@ public:
     int getAtomLast(void) const;
     std::string getResidueName(void) const;
     int getResidueNumber(void) const;
-    char getResidueChar(void) const;
-    std::tuple<int, int, int> getColorRgb(void) const;
     double getPosX(void) const;
     double getPosY(void) const;
-    int getAtomsCount(void) const;
 
     // prints
     void print(void) const;
