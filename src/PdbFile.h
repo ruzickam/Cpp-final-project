@@ -2,6 +2,7 @@
 #define PDBFILE_H
 
 #include <vector>
+#include <unordered_map>
 #include <fstream>
 #include <QString>
 #include "Atom.h"
@@ -20,6 +21,7 @@ public:
     QString getFileName(void) const;
     int getResSize(void) const;
 
+    // getters for residues data
     std::tuple<double, double> getResXY(int index) const;
     std::tuple<int, int, int> getResRgb(int index) const;
     char getResChar(int index) const;
@@ -28,16 +30,13 @@ public:
 private:
     // HELPER METHODS
 
-    // open
-
     // read
     bool readLines(std::ifstream& ifile);
 
     // parse
     bool parseAtom(const std::string& line, int numLine);
     void parseResidues(void);
-
-    // write
+    std::tuple<int, int, int, char> parseRGB_Char(const std::string& residueName) const;
 
     // print
     void printFileName(void) const;
@@ -47,6 +46,9 @@ private:
 
     // ----------------------------------------------
     // DATA
+
+    // map for rgb, resChar
+    static const std::unordered_map<std::string,int> aminoacid_map;
 
     // PDB file name
     QString fileName;

@@ -5,14 +5,19 @@
 //---CONSTRUCTORS---------------------------------------------------------------
 //==============================================================================
 
-Residue::Residue(int argAtomFirst, int argAtomLast, const std::string& argResidueName, int argResidueNumber, double argPosX, double argPosY)
+Residue::Residue(int argAtomFirst, int argAtomLast, const std::string& argResidueName, int argResidueNumber,\
+                 double argPosX, double argPosY, int argColorR, int argColorG, int argColorB, char argResidueChar)
 
      :atomFirst {argAtomFirst},
       atomLast {argAtomLast},
       residueName {argResidueName},
       residueNumber {argResidueNumber},
       posX {argPosX},
-      posY {argPosY}
+      posY {argPosY},
+      colorR {argColorR},
+      colorG {argColorG},
+      colorB {argColorB},
+      residueChar {argResidueChar}
 {
 }
 
@@ -48,16 +53,32 @@ int Residue::getResidueNumber(void) const
 
 //------------------------------------------------------------------------------
 
-double Residue::getPosX(void) const
+std::tuple<double, double> Residue::getposXposY(void) const
 {
-    return posX;
+    return std::make_tuple(posX, posY);
 }
 
 //------------------------------------------------------------------------------
 
-double Residue::getPosY(void) const
+std::tuple<int, int, int> Residue::getcolorRGB(void) const
 {
-    return posY;
+    return std::make_tuple(colorR, colorG, colorB);
+}
+
+//------------------------------------------------------------------------------
+
+char Residue::getResidueChar(void) const
+{
+    return residueChar;
+}
+
+//------------------------------------------------------------------------------
+
+std::tuple<std::string, int, int> Residue::getNameNumberCount(void) const
+{
+    return std::make_tuple(residueName,\
+                           residueNumber,\
+                           atomLast - atomFirst + 1);
 }
 
 //==============================================================================

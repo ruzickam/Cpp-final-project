@@ -41,18 +41,21 @@ void GraphicWidget::mousePressEvent(QMouseEvent* p_event)
     // select the residue based on click position
     for(auto i {0}; i < residuesSize; ++i) {
 
+        // get: posX, posY
         auto resPosX {0.0}, resPosY {0.0};
         std::tie(resPosX, resPosY) = pdbFile.getResXY(i);
 
+        // check whather we clicked inside a residue box
         if ( ( p_event->x() > resPosX &&\
                p_event->x() < ( resPosX + rectWidth ) ) &&\
              ( p_event->y() > resPosY &&\
                p_event->y() < ( resPosY + rectHeight ) ) ){
 
+            // SHOULD UPDATE ONLY WHEN THE SELECTED RESIDUE IS CHANGED!
             if ( i != selectedResidue ){
                 selectedResidue = i;
                 // re-paint the residues
-                update(); // SHOULD UPDATE ONLY WHEN THE SELECTED RESIDUE IS CHANGED!
+                update();
             }
         }
     }
@@ -130,21 +133,29 @@ void GraphicWidget::paintAllResidues(void)
 
     for(auto i {0}; i < residuesSize; ++i) {
 
-        // get data
+        // get: rgb, xPos, yPos
         auto r {0}, g {0}, b {0};
         std::tie(r, g, b) = pdbFile.getResRgb(i);
         auto resPosX {0.0}, resPosY {0.0};
         std::tie(resPosX, resPosY) = pdbFile.getResXY(i);
 
-        // draw rectangle
+        // set painter
         painter.setBrush(QColor(r,g,b));
         painter.setPen(Qt::NoPen);
+
+        // draw rectangle
         painter.drawRect( resPosX, resPosY, rectWidth, rectHeight );
 
         // draw symbol
         if ( displayShortcuts == true ){
+
+            // get residue char symbol
             auto resChar {pdbFile.getResChar(i)};
+
+            // set painter
             painter.setPen(pen1);
+
+            // draw text
             painter.drawText( resPosX + (rectWidth * xTextMultiplier),\
                               resPosY + (rectHeight * yTextMultiplier),\
                               QChar( resChar ) );
@@ -163,13 +174,15 @@ void GraphicWidget::paintSelectedResidue(void)
     if( ( selectedResidue < residuesSize ) && ( selectedResidue > -1 ) ){ // range check
 
     // 1. ---draw text for res description---
-        // output string
-        std:: string residueName;
-        auto residueNumber {0};
-        auto atomsCount {0};
-        std::tie(residueName, residueNumber, atomsCount) = pdbFile.getResNameNumCount(selectedResidue);
-        std::string residueDescription;
+        // output string vars
         std::ostringstream ss;
+        std:: string residueName, residueDescription;
+        auto residueNumber {0}, atomsCount {0};
+
+        // get: residueName, residueNumber, atomsCount
+        std::tie(residueName, residueNumber, atomsCount) = pdbFile.getResNameNumCount(selectedResidue);
+
+        // make output string
         ss << "Residue: " << residueName << residueNumber;
         ss << "     Number of atoms: " << atomsCount;
         residueDescription = ss.str();
@@ -178,6 +191,8 @@ void GraphicWidget::paintSelectedResidue(void)
         QPainter painter {this};
         QPen pen1 {Qt::black, 4};
         QFont font1 {"Helvetica", 9, 0, false};
+
+        // set painter
         painter.setPen(pen1);
         painter.setFont(font1);
 
@@ -187,12 +202,14 @@ void GraphicWidget::paintSelectedResidue(void)
     // 2. ---draw red rect---
         // paint tools
         QPen pen2 {Qt::red, 3};
-        painter.setPen(pen2);
-        painter.setBrush(Qt::NoBrush);
 
         // get position
         auto resPosX {0.0}, resPosY {0.0};
         std::tie(resPosX, resPosY) = pdbFile.getResXY(selectedResidue);
+
+        // set painter
+        painter.setPen(pen2);
+        painter.setBrush(Qt::NoBrush);
 
         // draw rect
         painter.drawRect(resPosX, resPosY,\

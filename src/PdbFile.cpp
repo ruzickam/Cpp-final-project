@@ -4,6 +4,34 @@
 #include "GraphicWidget.h"
 
 //==============================================================================
+//---MAP FOR SWITCH-------------------------------------------------------------
+//==============================================================================
+
+const std::unordered_map<std::string,int> PdbFile::aminoacid_map
+{
+    {"ALA",1},
+    {"ARG",2},
+    {"ASN",3},
+    {"ASP",4},
+    {"CYS",5},
+    {"GLN",6},
+    {"GLU",7},
+    {"GLY",8},
+    {"HIS",9},
+    {"ILE",10},
+    {"LEU",11},
+    {"LYS",12},
+    {"MET",13},
+    {"PHE",14},
+    {"PRO",15},
+    {"SER",16},
+    {"THR",17},
+    {"TRP",18},
+    {"TYR",19},
+    {"VAL",20}
+};
+
+//==============================================================================
 //---CONSTRUCTORS---------------------------------------------------------------
 //==============================================================================
 
@@ -20,7 +48,7 @@ bool PdbFile::readFile(const QString& dialogFileName)
 {
     // check the file name from dialog
     if( dialogFileName.isEmpty() ){
-        std::cout << "ERROR: Empty or no file was selected!" << std::endl;
+        std::cout << "Warning: No file was selected!" << std::endl;
         return false;
     }
 
@@ -41,7 +69,7 @@ bool PdbFile::readFile(const QString& dialogFileName)
     // open file
     ifile.open( fileName.toLatin1().constData() );
     if( ifile.fail() ){
-        std::cout << "ERROR: unable to open file!" << std::endl;
+        std::cout << "ERROR: Unable to open the file!" << std::endl;
         return false;
     }
     std::cout << "Opening file..." << std::endl;
@@ -91,163 +119,29 @@ int PdbFile::getResSize(void) const
 
 std::tuple<double, double> PdbFile::getResXY(int index) const
 {
-    return std::make_tuple(residues[index].getPosX(),\
-                           residues[index].getPosY());
+    return residues[index].getposXposY();
 }
 
 //------------------------------------------------------------------------------
 
 std::tuple<int, int, int> PdbFile::getResRgb(int index) const
 {
-    std::string residueName = residues[index].getResidueName();
-
-    if( residueName == "ALA" ){
-        return std::make_tuple(204, 255, 255);
-
-    } else if ( residueName == "ARG" ){
-        return std::make_tuple(230, 6, 6);
-
-    } else if ( residueName == "ASN" ){
-        return std::make_tuple(255, 153, 0);
-
-    } else if ( residueName == "ASP" ){
-        return std::make_tuple(255, 204, 153);
-
-    } else if ( residueName == "CYS" ){
-        return std::make_tuple(0, 255, 255);
-
-    } else if ( residueName == "GLN" ){
-        return std::make_tuple(255, 102, 0);
-
-    } else if ( residueName == "GLU" ){
-        return std::make_tuple(255, 204, 0);
-
-    } else if ( residueName == "GLY" ){
-        return std::make_tuple(0, 255, 0);
-
-    } else if ( residueName == "HIS" ){
-        return std::make_tuple(255, 255, 153);
-
-    } else if ( residueName == "ILE" ){
-        return std::make_tuple(0, 0, 128);
-
-    } else if ( residueName == "LEU" ){
-        return std::make_tuple(51, 102, 255);
-
-    } else if ( residueName == "LYS" ){
-        return std::make_tuple(198, 6, 0);
-
-    } else if ( residueName == "MET" ){
-        return std::make_tuple(153, 204, 255);
-
-    } else if ( residueName == "PHE" ){
-        return std::make_tuple(0, 204, 255);
-
-    } else if ( residueName == "PRO" ){
-        return std::make_tuple(255, 255, 0);
-
-    } else if ( residueName == "SER" ){
-        return std::make_tuple(204, 255, 153);
-
-    } else if ( residueName == "THR" ){
-        return std::make_tuple(0, 255, 153);
-
-    } else if ( residueName == "TRP" ){
-        return std::make_tuple(204, 153, 255);
-
-    }else if ( residueName == "TYR" ){
-        return std::make_tuple(204, 255, 204);
-
-    } else if ( residueName == "VAL" ){
-        return std::make_tuple(0, 0, 255);
-
-    } else {
-        return std::make_tuple(153, 153, 153);
-    }
+    return residues[index].getcolorRGB();
 }
 
 //------------------------------------------------------------------------------
 
 char PdbFile::getResChar(int index) const
 {
-    std::string residueName = residues[index].getResidueName();
-
-    if ( residueName == "ALA" ){
-        return 'A';
-    }
-    if ( residueName == "ARG" ){
-        return 'R';
-    }
-    if ( residueName == "ASN" ){
-        return 'N';
-    }
-    if ( residueName == "ASP" ){
-        return 'D';
-    }
-    if ( residueName == "CYS" ){
-        return 'C';
-    }
-    if ( residueName == "GLN" ){
-        return 'Q';
-    }
-    if ( residueName == "GLU" ){
-        return 'E';
-    }
-    if ( residueName == "GLY" ){
-        return 'G';
-    }
-    if ( residueName == "HIS" ){
-        return 'H';
-    }
-    if ( residueName == "ILE" ){
-        return 'I';
-    }
-    if ( residueName == "LEU" ){
-        return 'L';
-    }
-    if ( residueName == "LYS" ){
-        return 'K';
-    }
-    if ( residueName == "MET" ){
-        return 'M';
-    }
-    if ( residueName == "PHE" ){
-        return 'F';
-    }
-    if ( residueName == "PRO" ){
-        return 'P';
-    }
-    if ( residueName == "SER" ){
-        return 'S';
-    }
-    if ( residueName == "THR" ){
-        return 'T';
-    }
-    if ( residueName == "TRP" ){
-        return 'W';
-    }
-    if ( residueName == "TYR" ){
-        return 'Y';
-    }
-    if ( residueName == "VAL" ){
-        return 'V';
-    }
-    return 'X';
+    return residues[index].getResidueChar();
 }
 
 //------------------------------------------------------------------------------
 
 std::tuple<std::string, int, int> PdbFile::getResNameNumCount(int index) const
 {
-    return std::make_tuple(residues[index].getResidueName(),\
-                           residues[index].getResidueNumber(),\
-                           residues[index].getAtomLast() - residues[index].getAtomFirst() + 1 );
+    return residues[index].getNameNumberCount();
 }
-
-//==============================================================================
-//---HELPER METHODS - OPEN------------------------------------------------------
-//==============================================================================
-
 
 //==============================================================================
 //---HELPER METHODS - READ------------------------------------------------------
@@ -261,8 +155,8 @@ bool PdbFile::readLines(std::ifstream& ifile)
         return false;
     }
 
-    // helper vars for line reading
-    auto numLine {1};
+    // helper vars
+    auto numLine {1};   // we must count number of lines
     std::string line;
     std::string recordName;
 
@@ -289,7 +183,7 @@ bool PdbFile::readLines(std::ifstream& ifile)
 }
 
 //==============================================================================
-//---HELPER METHODS - SET-------------------------------------------------------
+//---HELPER METHODS - PARSE-----------------------------------------------------
 //==============================================================================
 
 bool PdbFile::parseAtom(const std::string& line, int numLine)
@@ -419,6 +313,10 @@ void PdbFile::parseResidues(void)
     const auto atomsSize {static_cast<int>(atoms.size())};      // atoms vector size
     auto firstAtom {0};                                         // index of the first atom in a residue
     auto columnNumber {0};                                      // start column number
+    auto colorR {153}, colorG {153}, colorB {153};              // residue color
+    auto residueChar {'X'};                                     // res char
+
+    // consts
     auto xPos {GraphicWidget::xStartPosition};                  // start position of the first residue
     auto yPos {GraphicWidget::yStartPosition};                  // start position of the first residue
     auto columnPerRow {GraphicWidget::columnPerRow};            // number of columns in each row
@@ -431,7 +329,8 @@ void PdbFile::parseResidues(void)
         // distinguish between two different residue
         if ( atoms[i].getResidueNumber() != atoms[i+1].getResidueNumber() ){
 
-            residues.emplace_back( firstAtom, i, atoms[i].getResidueName(), atoms[i].getResidueNumber(), xPos, yPos );
+            std::tie(colorR, colorG, colorB, residueChar) = parseRGB_Char( atoms[i].getResidueName() );
+            residues.emplace_back( firstAtom, i, atoms[i].getResidueName(), atoms[i].getResidueNumber(), xPos, yPos, colorR, colorG, colorB, residueChar );
 
             firstAtom = i + 1;
 
@@ -445,18 +344,64 @@ void PdbFile::parseResidues(void)
                 ++columnNumber;
             }
         }
-
+            // FIX ME!!!!!!
         if ( i + 2 == atomsSize ){
 
-            residues.emplace_back( firstAtom, i+1, atoms[i+1].getResidueName(), atoms[i+1].getResidueNumber(), xPos, yPos );
+            std::tie(colorR, colorG, colorB, residueChar) = parseRGB_Char( atoms[i+1].getResidueName() );
+            residues.emplace_back( firstAtom, i+1, atoms[i+1].getResidueName(), atoms[i+1].getResidueNumber(), xPos, yPos, colorR, colorG, colorB, residueChar );
         }
     }
 }
 
-//==============================================================================
-//---HELPER METHODS - WRITE-----------------------------------------------------
-//==============================================================================
+//------------------------------------------------------------------------------
 
+std::tuple<int, int, int, char> PdbFile::parseRGB_Char(const std::string& residueName) const
+{
+    switch(aminoacid_map.count(residueName) ? aminoacid_map.at(residueName) : 0) {
+    case 1:
+        return std::make_tuple(204, 255, 255, 'A');
+    case 2:
+        return std::make_tuple(230, 6, 6, 'R');
+    case 3:
+        return std::make_tuple(255, 153, 0, 'N');
+    case 4:
+        return std::make_tuple(255, 204, 153, 'D');
+    case 5:
+        return std::make_tuple(0, 255, 255, 'C');
+    case 6:
+        return std::make_tuple(255, 102, 0, 'Q');
+    case 7:
+        return std::make_tuple(255, 204, 0, 'E');
+    case 8:
+        return std::make_tuple(0, 255, 0, 'G');
+    case 9:
+        return std::make_tuple(255, 255, 153, 'H');
+    case 10:
+        return std::make_tuple(0, 0, 128, 'I');
+    case 11:
+        return std::make_tuple(51, 102, 255, 'L');
+    case 12:
+        return std::make_tuple(198, 6, 0, 'K');
+    case 13:
+        return std::make_tuple(153, 204, 255, 'M');
+    case 14:
+        return std::make_tuple(0, 204, 255, 'F');
+    case 15:
+        return std::make_tuple(255, 255, 0, 'P');
+    case 16:
+        return std::make_tuple(204, 255, 153, 'S');
+    case 17:
+        return std::make_tuple(0, 255, 153, 'T');
+    case 18:
+        return std::make_tuple(204, 153, 255, 'W');
+    case 19:
+        return std::make_tuple(204, 255, 204, 'Y');
+    case 20:
+        return std::make_tuple(0, 0, 255, 'V');
+    case 0: //this is for the undefined case
+        return std::make_tuple(153, 153, 153, 'X');
+    }
+}
 
 //==============================================================================
 //---HELPER METHODS - PRINT-----------------------------------------------------
