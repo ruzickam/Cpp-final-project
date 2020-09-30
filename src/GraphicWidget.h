@@ -45,8 +45,8 @@ private slots:
 private:
     // HELPERS
     QString openFileDialog(void);
-    void paintAllResidues(int residuesSize, QPainter& painter, const QPen& pen1);
-    void paintSelectedResidue(int residuesSize, QPainter& painter, const QPen& pen1, const QPen& pen2);
+    void paintAllResidues(void);
+    void paintSelectedResidue(void);
 
     // ----------------------------------------------
     // DATA

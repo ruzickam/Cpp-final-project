@@ -24,38 +24,24 @@ GraphicWidget::GraphicWidget(QWidget* parent)
 
 void GraphicWidget::paintEvent(QPaintEvent* )
 {
-    // paint tools
-    QPainter painter {this};
-    QPen pen1 {Qt::black, 4};
-    QPen pen2 {Qt::red, 3};
-    QFont font1 {"Helvetica", 9, 0, false};
-
-    // initial setup
-    painter.setFont(font1);
-
-    // vector size
-    const auto residuesSize {pdbFile.getResSize()};
-
-    // -----------------------------------------------------
-
     // paint all residues
-    paintAllResidues(residuesSize, painter, pen1);
+    paintAllResidues();
 
-    // paint only selected
-    paintSelectedResidue(residuesSize, painter, pen1, pen2);
+    // paint highlighter for selected residue
+    paintSelectedResidue();
 }
 
 //------------------------------------------------------------------------------
 
 void GraphicWidget::mousePressEvent(QMouseEvent* p_event)
 {
-    const auto residuesSize {pdbFile.getResSize()};   // vector size
-    auto resPosX {0.0};
-    auto resPosY {0.0};
+    // get vector size
+    const auto residuesSize {pdbFile.getResSize()};
 
     // select the residue based on click position
     for(auto i {0}; i < residuesSize; ++i) {
 
+        auto resPosX {0.0}, resPosY {0.0};
         std::tie(resPosX, resPosY) = pdbFile.getResXY(i);
 
         if ( ( p_event->x() > resPosX &&\
@@ -124,25 +110,31 @@ QString GraphicWidget::openFileDialog(void)
 
 //------------------------------------------------------------------------------
 
-void GraphicWidget::paintAllResidues(int residuesSize, QPainter& painter, const QPen& pen1)
+void GraphicWidget::paintAllResidues(void)
 {
-    // 1. ---draw file name---
+// 1. ---draw file name---
+    // paint tools
+    QPainter painter {this}; // paint tools
+    QPen pen1 {Qt::black, 4};
+    QFont font1 {"Helvetica", 9, 0, false};
     painter.setPen(pen1);
+    painter.setFont(font1);
+
+    // draw text
     painter.drawText( 10, 10, "File:" );
     painter.drawText( 10, 30, pdbFile.getFileName() );
 
-    // 2. ---draw rectangles + symbols---
-    auto r {0}, g {0}, b {0};
-    auto resPosX {0.0};
-    auto resPosY {0.0};
-    auto resChar {'x'};
+// 2. ---draw rectangles + symbols---
+    // get vector size
+    const auto residuesSize {pdbFile.getResSize()};
 
     for(auto i {0}; i < residuesSize; ++i) {
 
         // get data
+        auto r {0}, g {0}, b {0};
         std::tie(r, g, b) = pdbFile.getResRgb(i);
+        auto resPosX {0.0}, resPosY {0.0};
         std::tie(resPosX, resPosY) = pdbFile.getResXY(i);
-        resChar = pdbFile.getResChar(i);
 
         // draw rectangle
         painter.setBrush(QColor(r,g,b));
@@ -151,6 +143,7 @@ void GraphicWidget::paintAllResidues(int residuesSize, QPainter& painter, const 
 
         // draw symbol
         if ( displayShortcuts == true ){
+            auto resChar {pdbFile.getResChar(i)};
             painter.setPen(pen1);
             painter.drawText( resPosX + (rectWidth * xTextMultiplier),\
                               resPosY + (rectHeight * yTextMultiplier),\
@@ -162,35 +155,46 @@ void GraphicWidget::paintAllResidues(int residuesSize, QPainter& painter, const 
 
 //------------------------------------------------------------------------------
 
-void GraphicWidget::paintSelectedResidue(int residuesSize, QPainter& painter, const QPen& pen1, const QPen& pen2)
+void GraphicWidget::paintSelectedResidue(void)
 {
+    // get vector size
+    const auto residuesSize {pdbFile.getResSize()};
+
     if( ( selectedResidue < residuesSize ) && ( selectedResidue > -1 ) ){ // range check
 
-        // get data
-        auto resPosX {0.0};
-        auto resPosY {0.0};
-        std:: string residueName {""};
+    // 1. ---draw text for res description---
+        // output string
+        std:: string residueName;
         auto residueNumber {0};
         auto atomsCount {0};
-
-        std::tie(resPosX, resPosY) = pdbFile.getResXY(selectedResidue);
         std::tie(residueName, residueNumber, atomsCount) = pdbFile.getResNameNumCount(selectedResidue);
-
-        // 1. ---draw text for res description---
-        painter.setPen(pen1);      
         std::string residueDescription;
         std::ostringstream ss;
-
         ss << "Residue: " << residueName << residueNumber;
         ss << "     Number of atoms: " << atomsCount;
         residueDescription = ss.str();
 
+        // paint tools
+        QPainter painter {this};
+        QPen pen1 {Qt::black, 4};
+        QFont font1 {"Helvetica", 9, 0, false};
+        painter.setPen(pen1);
+        painter.setFont(font1);
+
+        // draw text
         painter.drawText(10, height() - 10, residueDescription.c_str());
 
-        // 2. ---draw red rect---
-        painter.setBrush(Qt::NoBrush);
+    // 2. ---draw red rect---
+        // paint tools
+        QPen pen2 {Qt::red, 3};
         painter.setPen(pen2);
+        painter.setBrush(Qt::NoBrush);
 
+        // get position
+        auto resPosX {0.0}, resPosY {0.0};
+        std::tie(resPosX, resPosY) = pdbFile.getResXY(selectedResidue);
+
+        // draw rect
         painter.drawRect(resPosX, resPosY,\
                          rectWidth, rectHeight );
     }

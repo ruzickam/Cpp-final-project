@@ -39,7 +39,7 @@ bool PdbFile::readFile(const QString& dialogFileName)
     std::ifstream ifile;
 
     // open file
-    ifile.open( fileName.toLatin1().constData() ); // because of this cannot use const &
+    ifile.open( fileName.toLatin1().constData() );
     if( ifile.fail() ){
         std::cout << "ERROR: unable to open file!" << std::endl;
         return false;
@@ -235,8 +235,6 @@ char PdbFile::getResChar(int index) const
     return 'X';
 }
 
-
-
 //------------------------------------------------------------------------------
 
 std::tuple<std::string, int, int> PdbFile::getResNameNumCount(int index) const
@@ -263,10 +261,12 @@ bool PdbFile::readLines(std::ifstream& ifile)
         return false;
     }
 
+    // helper vars for line reading
     auto numLine {1};
     std::string line;
     std::string recordName;
 
+    // read every line
     while ( !ifile.eof() ){
 
         std::getline(ifile, line);
@@ -294,25 +294,26 @@ bool PdbFile::readLines(std::ifstream& ifile)
 
 bool PdbFile::parseAtom(const std::string& line, int numLine)
 {
-    // helpers: string, stringstream
-    std::string s;
-    std::istringstream sstream;
-
     // Line must have at least 53 chars to obtain all neccesary values
     if ( line.length() < 53 ){
         std::cout << "Warning: the line (" << numLine << ") is too short" << std::endl;
         return false;
     }
 
+    // helper: string
+    std::string s;
+
     // recordType
     auto recordType {0};
-    std::string recordName;
-    recordName = line.substr(0,6);
-    if (recordName == "ATOM  ") {
+    s = line.substr(0,6);
+    if (s == "ATOM  ") {
         recordType = Atom::RECORD_ATOM;
     } else {
         recordType = Atom::RECORD_HEATM;
     }
+
+    // helper: stringstream
+    std::istringstream sstream;
 
     // atomNumber
     auto atomNumber {0};
@@ -415,11 +416,15 @@ bool PdbFile::parseAtom(const std::string& line, int numLine)
 
 void PdbFile::parseResidues(void)
 {
-    auto firstAtom {0};                        // index of the first atom in a residue
-    auto xPos {GraphicWidget::xStartPosition}; // start position of the first residue
-    auto yPos {GraphicWidget::yStartPosition}; // start position of the first residue
-    auto columnNumber {0};                     // start column number
-    const auto atomsSize {static_cast<int>(atoms.size())};       // atoms vector size
+    const auto atomsSize {static_cast<int>(atoms.size())};      // atoms vector size
+    auto firstAtom {0};                                         // index of the first atom in a residue
+    auto columnNumber {0};                                      // start column number
+    auto xPos {GraphicWidget::xStartPosition};                  // start position of the first residue
+    auto yPos {GraphicWidget::yStartPosition};                  // start position of the first residue
+    auto columnPerRow {GraphicWidget::columnPerRow};            // number of columns in each row
+    auto spaceBetweenRows {GraphicWidget::spaceBetweenRows};    // space between rows
+    auto rectHeight {GraphicWidget::rectHeight};                // rectangle height
+    auto rectWidth {GraphicWidget::rectWidth};                  // rectangle width
 
     for(auto i {0}; i < atomsSize - 1; ++i) {
 
@@ -431,12 +436,12 @@ void PdbFile::parseResidues(void)
             firstAtom = i + 1;
 
             // check column and set xPos, yPos
-            if ( columnNumber == GraphicWidget::columnPerRow ){
-                yPos = yPos + GraphicWidget::rectHeight + GraphicWidget::spaceBetweenRows;   // 8 = space between rows
-                xPos = xPos - (GraphicWidget::columnPerRow * GraphicWidget::rectWidth);
+            if ( columnNumber == columnPerRow ){
+                yPos = yPos + rectHeight + spaceBetweenRows;   // 8 = space between rows
+                xPos = xPos - (columnPerRow * rectWidth);
                 columnNumber = 0;
             } else {
-                xPos = xPos + GraphicWidget::rectWidth;
+                xPos = xPos + rectWidth;
                 ++columnNumber;
             }
         }

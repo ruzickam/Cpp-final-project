@@ -22,12 +22,6 @@ int Application::run(void) const
 
     GraphicWidget graphicWidget {&mainWindow};
     QVBoxLayout rightLayout;
-
-    QPushButton buttonHide {"Hide", &mainWindow};
-    QPushButton buttonShow {"Show", &mainWindow};
-    QPushButton buttonOpenFile {"Open File", &mainWindow};
-
-    //--------------------------------------------------------------------------
     
     // add graphicWidget and rightLayout to mainLayout
     mainLayout.addWidget(&graphicWidget);
@@ -36,20 +30,32 @@ int Application::run(void) const
     // set graphicWidget size
     graphicWidget.setMinimumSize(400, 700);
 
+    // -------------------------------------------------------
+
+    QPushButton buttonHide {"Hide", &mainWindow};
+    QPushButton buttonShow {"Show", &mainWindow};
+    QPushButton buttonOpenFile {"Open File", &mainWindow};
+
     // right column with buttons  
     rightLayout.addWidget(&buttonHide);
     rightLayout.addWidget(&buttonShow);
     rightLayout.addWidget(&buttonOpenFile);
     rightLayout.addStretch();
 
+    // -------------------------------------------------------
+
     // setup and show main window
     mainWindow.setWindowTitle("Show sequence from PDB file");
     mainWindow.show();
+
+    // -------------------------------------------------------
 
     // click signals for buttons
     QObject::connect( &buttonHide, SIGNAL( clicked() ), &graphicWidget, SLOT(clickHideGraphic() ) );
     QObject::connect( &buttonShow, SIGNAL( clicked() ), &graphicWidget, SLOT(clickShowGraphic() ) );
     QObject::connect( &buttonOpenFile, SIGNAL( clicked() ), &graphicWidget, SLOT(clickOpenFile() ) );
+
+    // -------------------------------------------------------
 
     auto ret {0};
     try {
