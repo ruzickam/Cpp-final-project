@@ -8,9 +8,9 @@ class Residue
 {
 public:
     // constructors
-
-    // setters
-    void setValues(int argAtomFirst, int argAtomLast, const std::string& argResidueName, int argResidueNumber, double argPosX, double argPosY);
+    Residue() = delete;
+    Residue(int argAtomFirst, int argAtomLast, const std::string& argResidueName,\
+            int argResidueNumber, double argPosX, double argPosY);
 
     // getters
     int getAtomFirst(void) const;
@@ -28,14 +28,14 @@ public:
 
 private:
     // residue data
-    int atomFirst {0};
-    int atomLast {0};
-    std::string residueName {"   "};
-    int residueNumber {0};
+    int atomFirst;
+    int atomLast;
+    std::string residueName;
+    int residueNumber;
 
     // residue rectangle position
-    double posX {0.0};
-    double posY {0.0};
+    double posX;
+    double posY;
 };
 
 #endif // RESIDUE_H

@@ -11,6 +11,7 @@ class PdbFile
 {
 public:
     // constructors
+    PdbFile();
 
     // open and read PDB file
     bool readFile(const QString& dialogFileName);
@@ -28,8 +29,9 @@ private:
     // read
     bool readLines(std::ifstream& ifile);
 
-    // set
-    void setResidues(void);
+    // parse
+    bool parseAtom(const std::string& line, int numLine);
+    void parseResidues(void);
 
     // write
 
@@ -40,11 +42,10 @@ private:
     void clearVectors(void);
 
     // ----------------------------------------------
-
     // DATA
 
     // PDB file name
-    QString fileName {"No file"};
+    QString fileName;
 
     // atom & residue containers
     std::vector<Atom>       atoms;

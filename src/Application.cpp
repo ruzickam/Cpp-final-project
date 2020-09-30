@@ -8,7 +8,7 @@
 //---CONSTRUCTORS---------------------------------------------------------------
 //==============================================================================
 
-Application::Application(int &argc, char *argv[]) : QApplication(argc, argv) {}
+Application::Application(int& argc, char* argv[]) : QApplication(argc, argv) {}
 
 //==============================================================================
 //---EVENT LOOP-----------------------------------------------------------------
@@ -47,9 +47,9 @@ int Application::run(void) const
     mainWindow.show();
 
     // click signals for buttons
-    QObject::connect(&buttonHide, SIGNAL(clicked()), &graphicWidget, SLOT(clickHideGraphic()));
-    QObject::connect(&buttonShow, SIGNAL(clicked()), &graphicWidget, SLOT(clickShowGraphic()));
-    QObject::connect(&buttonOpenFile, SIGNAL(clicked()), &graphicWidget, SLOT(clickOpenFile()));
+    QObject::connect( &buttonHide, SIGNAL( clicked() ), &graphicWidget, SLOT(clickHideGraphic() ) );
+    QObject::connect( &buttonShow, SIGNAL( clicked() ), &graphicWidget, SLOT(clickShowGraphic() ) );
+    QObject::connect( &buttonOpenFile, SIGNAL( clicked() ), &graphicWidget, SLOT(clickOpenFile() ) );
 
     auto ret {0};
     try {

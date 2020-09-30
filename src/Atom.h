@@ -7,41 +7,43 @@ class Atom
 {
 public:
     // constructors
+    Atom() = delete;
+    Atom(int argRecordType, int argAtomNumber, const std::string& argAtomName, char argAlternateLocation,\
+         const std::string& argResidueName, char argChainId, int argResidueNumber, char argICode, double argCoordX,\
+         double argCoordY, double argCoordZ, double argOccupancy, double argTempFactor, const std::string& argElementName,\
+         const std::string& argFormalCharge, bool argIsOccupancy, bool argIsTempFactor);
 
-    // getters
-    int getResidueNumber(void) const;
-    std::string getResidueName(void) const;
-
-    // setters
-    bool setValues(const std::string& line, int numLine);
-
-    // print
-    void print(void) const;
-
-private:
     // record types
     static constexpr auto RECORD_UNKNOWN {0};
     static constexpr auto RECORD_ATOM {1};
     static constexpr auto RECORD_HEATM {2};
 
+    // getters
+    int getResidueNumber(void) const;
+    std::string getResidueName(void) const;
+
+    // print
+    void print(void) const;
+
+private:
     // atom data
-    int recordType {RECORD_UNKNOWN};
-    int atomNumber {0};
-    std::string atomName {"    "};
-    char alternateLocation {' '};
-    std::string residueName {"   "};
-    char chainId {' '};
-    int residueNumber {0};
-    char iCode {' '};
-    double coordX {0.0};
-    double coordY {0.0};
-    double coordZ {0.0};
-    double occupancy {0.0};
-    double tempFactor {0.0};
-    std::string elementName {"  "};
-    std::string formalCharge {"  "};
-    bool isOccupancy {false};
-    bool isTempFactor {false};
+    int recordType;
+    int atomNumber;
+    std::string atomName;
+    char alternateLocation;
+    std::string residueName;
+    char chainId;
+    int residueNumber;
+    char iCode;
+    double coordX;
+    double coordY;
+    double coordZ;
+    double occupancy;
+    double tempFactor;
+    std::string elementName;
+    std::string formalCharge;
+    bool isOccupancy;
+    bool isTempFactor;
 };
 
 #endif // ATOM_H

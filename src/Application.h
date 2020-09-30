@@ -9,7 +9,8 @@ class Application : public QApplication
 
 public:
     // constructors
-    Application(int &argc, char *argv[]);
+    Application() = delete;
+    Application(int& argc, char* argv[]);
 
     // event loop
     int run(void) const;

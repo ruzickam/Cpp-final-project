@@ -2,20 +2,18 @@
 #include "Residue.h"
 
 //==============================================================================
-//---SETTERS--------------------------------------------------------------------
+//---CONSTRUCTORS---------------------------------------------------------------
 //==============================================================================
 
-void Residue::setValues(int argAtomFirst, int argAtomLast, const std::string& argResidueName, int argResidueNumber, double argPosX, double argPosY)
+Residue::Residue(int argAtomFirst, int argAtomLast, const std::string& argResidueName, int argResidueNumber, double argPosX, double argPosY)
+
+     :atomFirst {argAtomFirst},
+      atomLast {argAtomLast},
+      residueName {argResidueName},
+      residueNumber {argResidueNumber},
+      posX {argPosX},
+      posY {argPosY}
 {
-    atomFirst = argAtomFirst;
-    atomLast = argAtomLast;
-
-    residueName = argResidueName;
-    residueNumber = argResidueNumber;
-
-    // set posX, posY
-    posX = argPosX;
-    posY = argPosY;
 }
 
 //==============================================================================
