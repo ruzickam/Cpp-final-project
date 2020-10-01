@@ -7,7 +7,7 @@
 //---MAP FOR SWITCH-------------------------------------------------------------
 //==============================================================================
 
-const std::unordered_map<std::string,int> PdbFile::aminoacid_map
+const std::unordered_map<std::string,int> PdbFile::aminoacidMap
 {
     {"ALA",1},
     {"ARG",2},
@@ -344,7 +344,7 @@ void PdbFile::parseResidues(void)
                 ++columnNumber;
             }
         }
-            // FIX ME!!!!!!
+            // the last atom
         if ( i + 2 == atomsSize ){
 
             std::tie(colorR, colorG, colorB, residueChar) = parseRGB_Char( atoms[i+1].getResidueName() );
@@ -357,7 +357,7 @@ void PdbFile::parseResidues(void)
 
 std::tuple<int, int, int, char> PdbFile::parseRGB_Char(const std::string& residueName) const
 {
-    switch(aminoacid_map.count(residueName) ? aminoacid_map.at(residueName) : 0) {
+    switch(aminoacidMap.count(residueName) ? aminoacidMap.at(residueName) : 0) {
     case 1:
         return std::make_tuple(204, 255, 255, 'A');
     case 2:
