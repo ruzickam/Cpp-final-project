@@ -42,9 +42,9 @@ protected:
 
 private slots:
     // BUTTONS
-    void clickHideGraphic(void);
-    void clickShowGraphic(void);
-    void clickOpenFile(void);
+    void hideShortcuts(void);
+    void showShortcuts(void);
+    void openPDBfile(void);
 
 private:
     // HELPERS
@@ -62,7 +62,7 @@ private:
     int selectedResidue;
 
     // display shortcuts of residues
-    bool displayShortcuts;
+    bool areShortcutsDisplayed;
 };
 
 #endif // GRAPHICWIDGET_H

@@ -12,7 +12,7 @@ GraphicWidget::GraphicWidget(QWidget* parent)
 
      :QWidget(parent),
       selectedResidue {-1},
-      displayShortcuts {true}
+      areShortcutsDisplayed {true}
 {
 }
 
@@ -65,9 +65,9 @@ void GraphicWidget::mousePressEvent(QMouseEvent* p_event)
 //---BUTTONS--------------------------------------------------------------------
 //==============================================================================
 
-void GraphicWidget::clickHideGraphic(void)
+void GraphicWidget::hideShortcuts(void)
 {
-    displayShortcuts = false;
+    areShortcutsDisplayed = false;
 
     // re-paint the residues
     update();
@@ -75,9 +75,9 @@ void GraphicWidget::clickHideGraphic(void)
 
 //------------------------------------------------------------------------------
 
-void GraphicWidget::clickShowGraphic(void)
+void GraphicWidget::showShortcuts(void)
 {
-    displayShortcuts = true;
+    areShortcutsDisplayed = true;
 
     // re-paint the residues
     update();
@@ -85,7 +85,7 @@ void GraphicWidget::clickShowGraphic(void)
 
 //------------------------------------------------------------------------------
 
-void GraphicWidget::clickOpenFile(void)
+void GraphicWidget::openPDBfile(void)
 {
     // read a file
     if ( protein.initFromPDBfile( openFileDialog() ) == false ){
@@ -147,7 +147,7 @@ void GraphicWidget::paintAllResidues(void)
         painter.drawRect( resPosX, resPosY, rectWidth, rectHeight );
 
         // draw symbol
-        if ( displayShortcuts == true ){
+        if ( areShortcutsDisplayed == true ){
 
             // get residue char symbol
             auto resChar {protein.getResChar(i)};

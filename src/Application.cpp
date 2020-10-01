@@ -51,9 +51,9 @@ int Application::run(void) const
     // -------------------------------------------------------
 
     // click signals for buttons
-    QObject::connect( &buttonHide, SIGNAL( clicked() ), &graphicWidget, SLOT(clickHideGraphic() ) );
-    QObject::connect( &buttonShow, SIGNAL( clicked() ), &graphicWidget, SLOT(clickShowGraphic() ) );
-    QObject::connect( &buttonOpenFile, SIGNAL( clicked() ), &graphicWidget, SLOT(clickOpenFile() ) );
+    QObject::connect( &buttonHide, SIGNAL( clicked() ), &graphicWidget, SLOT(hideShortcuts() ) );
+    QObject::connect( &buttonShow, SIGNAL( clicked() ), &graphicWidget, SLOT(showShortcuts() ) );
+    QObject::connect( &buttonOpenFile, SIGNAL( clicked() ), &graphicWidget, SLOT(openPDBfile() ) );
 
     // -------------------------------------------------------
 
