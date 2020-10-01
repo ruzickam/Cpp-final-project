@@ -16,8 +16,6 @@ public:
     int run(void) const;
 
 private:
-    static constexpr auto minWindowWidth {400};
-    static constexpr auto minWindowHeight {700};
 };
 
 #endif // APPLICATION_H

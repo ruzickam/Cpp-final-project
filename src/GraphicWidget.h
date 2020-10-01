@@ -14,6 +14,10 @@ public:
     GraphicWidget() = delete;
     GraphicWidget(QWidget* parent);
 
+    // window size
+    static constexpr auto minWindowWidth {400};
+    static constexpr auto minWindowHeight {700};
+
     // graphic constants
     static constexpr auto rectWidth {18.0};
     static constexpr auto rectHeight {20.0};
