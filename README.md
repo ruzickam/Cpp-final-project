@@ -1,6 +1,8 @@
-# show-pdb-sequence
+# Show PDB Sequence
 
-# Compile on linux:
+Small app to visualize a PDB (Protein Data Bank) file.
+
+# Compile on linux
 
 $ qmake -o ./build/Makefile final.pro
 
