@@ -48,7 +48,7 @@ private:
     // DATA
 
     // map for rgb, resChar
-    static const std::unordered_map<std::string,int> aminoacid_map;
+    static const std::unordered_map<std::string,int> aminoacidMap;
 
     // PDB file name
     QString fileName;
