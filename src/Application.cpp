@@ -28,7 +28,7 @@ int Application::run(void) const
     mainLayout.addLayout(&rightLayout);  
 
     // set graphicWidget size
-    graphicWidget.setMinimumSize(400, 700);
+    graphicWidget.setMinimumSize(minWindowWidth , minWindowHeight);
 
     // -------------------------------------------------------
 
