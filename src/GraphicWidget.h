@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QPainter>
-#include <PdbFile.h>
+#include <Protein.h>
 
 class GraphicWidget : public QWidget
 {
@@ -56,7 +56,7 @@ private:
     // DATA
 
     // PDB File
-    PdbFile pdbFile;
+    Protein protein;
 
     // selected residue
     int selectedResidue;

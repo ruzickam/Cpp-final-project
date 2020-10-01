@@ -8,41 +8,41 @@
 #include "Atom.h"
 #include "Residue.h"
 
-class PdbFile
+class Protein
 {
 public:
     // constructors
-    PdbFile();
+    Protein();
 
     // open and read PDB file
-    bool readFile(const QString& dialogFileName);
+    bool initFromPDBfile(const QString& dialogFileName);
 
     // getters
-    QString getFileName(void) const;
-    int getResSize(void) const;
+    QString getPDBfileName(void) const;
+    int getNumOfRes(void) const;
 
     // getters for residues data
-    std::tuple<double, double> getResXY(int index) const;
-    std::tuple<int, int, int> getResRgb(int index) const;
+    std::tuple<double, double> getResRectXY(int index) const;
+    std::tuple<int, int, int> getResColor(int index) const;
     char getResChar(int index) const;
-    std::tuple<std::string, int, int> getResNameNumCount(int index) const;
+    std::tuple<std::string, int, int> getResBasicInfo(int index) const; // residueName, residueNumber, atomsCount
 
 private:
     // HELPER METHODS
 
     // read
-    bool readLines(std::ifstream& ifile);
+    bool readPDBlines(std::ifstream& ifile);
 
     // parse
     bool parseAtom(const std::string& line, int numLine);
     void parseResidues(void);
-    std::tuple<int, int, int, char> parseRGB_Char(const std::string& residueName) const;
+    std::tuple<int, int, int, char> parseResColor_Char(const std::string& residueName) const;
 
     // print
-    void printFileName(void) const;
+    void printPDBfileName(void) const;
 
     // clear
-    void clearVectors(void);
+    void clearData(void);
 
     // ----------------------------------------------
     // DATA
@@ -51,7 +51,7 @@ private:
     static const std::unordered_map<std::string,int> aminoacidMap;
 
     // PDB file name
-    QString fileName;
+    QString pdbFileName;
 
     // atom & residue containers
     std::vector<Atom>       atoms;

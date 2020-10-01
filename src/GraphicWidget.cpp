@@ -36,14 +36,14 @@ void GraphicWidget::paintEvent(QPaintEvent* )
 void GraphicWidget::mousePressEvent(QMouseEvent* p_event)
 {
     // get vector size
-    const auto residuesSize {pdbFile.getResSize()};
+    const auto residuesSize {protein.getNumOfRes()};
 
     // select the residue based on click position
     for(auto i {0}; i < residuesSize; ++i) {
 
         // get: posX, posY
         auto resPosX {0.0}, resPosY {0.0};
-        std::tie(resPosX, resPosY) = pdbFile.getResXY(i);
+        std::tie(resPosX, resPosY) = protein.getResRectXY(i);
 
         // check whather we clicked inside a residue box
         if ( ( p_event->x() > resPosX &&\
@@ -88,7 +88,7 @@ void GraphicWidget::clickShowGraphic(void)
 void GraphicWidget::clickOpenFile(void)
 {
     // read a file
-    if ( pdbFile.readFile( openFileDialog() ) == false ){
+    if ( protein.initFromPDBfile( openFileDialog() ) == false ){
         return;
     }
 
@@ -125,19 +125,19 @@ void GraphicWidget::paintAllResidues(void)
 
     // draw text
     painter.drawText( 10, 10, "File:" );
-    painter.drawText( 10, 30, pdbFile.getFileName() );
+    painter.drawText( 10, 30, protein.getPDBfileName() );
 
 // 2. ---draw rectangles + symbols---
     // get vector size
-    const auto residuesSize {pdbFile.getResSize()};
+    const auto residuesSize {protein.getNumOfRes()};
 
     for(auto i {0}; i < residuesSize; ++i) {
 
         // get: rgb, xPos, yPos
         auto r {0}, g {0}, b {0};
-        std::tie(r, g, b) = pdbFile.getResRgb(i);
+        std::tie(r, g, b) = protein.getResColor(i);
         auto resPosX {0.0}, resPosY {0.0};
-        std::tie(resPosX, resPosY) = pdbFile.getResXY(i);
+        std::tie(resPosX, resPosY) = protein.getResRectXY(i);
 
         // set painter
         painter.setBrush(QColor(r,g,b));
@@ -150,7 +150,7 @@ void GraphicWidget::paintAllResidues(void)
         if ( displayShortcuts == true ){
 
             // get residue char symbol
-            auto resChar {pdbFile.getResChar(i)};
+            auto resChar {protein.getResChar(i)};
 
             // set painter
             painter.setPen(pen1);
@@ -169,7 +169,7 @@ void GraphicWidget::paintAllResidues(void)
 void GraphicWidget::paintSelectedResidue(void)
 {
     // get vector size
-    const auto residuesSize {pdbFile.getResSize()};
+    const auto residuesSize {protein.getNumOfRes()};
 
     if( ( selectedResidue < residuesSize ) && ( selectedResidue > -1 ) ){ // range check
 
@@ -180,7 +180,7 @@ void GraphicWidget::paintSelectedResidue(void)
         auto residueNumber {0}, atomsCount {0};
 
         // get: residueName, residueNumber, atomsCount
-        std::tie(residueName, residueNumber, atomsCount) = pdbFile.getResNameNumCount(selectedResidue);
+        std::tie(residueName, residueNumber, atomsCount) = protein.getResBasicInfo(selectedResidue);
 
         // make output string
         ss << "Residue: " << residueName << residueNumber;
@@ -205,7 +205,7 @@ void GraphicWidget::paintSelectedResidue(void)
 
         // get position
         auto resPosX {0.0}, resPosY {0.0};
-        std::tie(resPosX, resPosY) = pdbFile.getResXY(selectedResidue);
+        std::tie(resPosX, resPosY) = protein.getResRectXY(selectedResidue);
 
         // set painter
         painter.setPen(pen2);

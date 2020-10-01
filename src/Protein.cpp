@@ -1,13 +1,13 @@
 #include <iostream>
 #include <sstream>
-#include "PdbFile.h"
+#include "Protein.h"
 #include "GraphicWidget.h"
 
 //==============================================================================
 //---MAP FOR SWITCH-------------------------------------------------------------
 //==============================================================================
 
-const std::unordered_map<std::string,int> PdbFile::aminoacidMap
+const std::unordered_map<std::string,int> Protein::aminoacidMap
 {
     {"ALA",1},
     {"ARG",2},
@@ -35,8 +35,8 @@ const std::unordered_map<std::string,int> PdbFile::aminoacidMap
 //---CONSTRUCTORS---------------------------------------------------------------
 //==============================================================================
 
-PdbFile::PdbFile()
-    :fileName {"No file"}
+Protein::Protein()
+    :pdbFileName {"No file"}
 {
 }
 
@@ -44,7 +44,7 @@ PdbFile::PdbFile()
 //---OPEN AND READ PDB FILE-----------------------------------------------------
 //==============================================================================
 
-bool PdbFile::readFile(const QString& dialogFileName)
+bool Protein::initFromPDBfile(const QString& dialogFileName)
 {
     // check the file name from dialog
     if( dialogFileName.isEmpty() ){
@@ -53,13 +53,13 @@ bool PdbFile::readFile(const QString& dialogFileName)
     }
 
     // copy file name
-    fileName = dialogFileName;
+    pdbFileName = dialogFileName;
 
     // print file name
-    printFileName();
+    printPDBfileName();
 
     // clear all previous data
-    clearVectors();
+    clearData();
 
     // ---START: FILE MANIPULATION-------------------
 
@@ -67,7 +67,7 @@ bool PdbFile::readFile(const QString& dialogFileName)
     std::ifstream ifile;
 
     // open file
-    ifile.open( fileName.toLatin1().constData() );
+    ifile.open( pdbFileName.toLatin1().constData() );
     if( ifile.fail() ){
         std::cout << "ERROR: Unable to open the file!" << std::endl;
         return false;
@@ -75,7 +75,7 @@ bool PdbFile::readFile(const QString& dialogFileName)
     std::cout << "Opening file..." << std::endl;
 
     // read lines
-    if ( ! readLines(ifile) )
+    if ( ! readPDBlines(ifile) )
         return false;
 
     // close the file
@@ -103,42 +103,42 @@ bool PdbFile::readFile(const QString& dialogFileName)
 //---GETTERS--------------------------------------------------------------------
 //==============================================================================
 
-QString PdbFile::getFileName(void) const
+QString Protein::getPDBfileName(void) const
 {
-    return fileName;
+    return pdbFileName;
 }
 
 //------------------------------------------------------------------------------
 
-int PdbFile::getResSize(void) const
+int Protein::getNumOfRes(void) const
 {
     return static_cast<int>(residues.size());
 }
 
 //------------------------------------------------------------------------------
 
-std::tuple<double, double> PdbFile::getResXY(int index) const
+std::tuple<double, double> Protein::getResRectXY(int index) const
 {
     return residues[index].getposXposY();
 }
 
 //------------------------------------------------------------------------------
 
-std::tuple<int, int, int> PdbFile::getResRgb(int index) const
+std::tuple<int, int, int> Protein::getResColor(int index) const
 {
     return residues[index].getcolorRGB();
 }
 
 //------------------------------------------------------------------------------
 
-char PdbFile::getResChar(int index) const
+char Protein::getResChar(int index) const
 {
     return residues[index].getResidueChar();
 }
 
 //------------------------------------------------------------------------------
 
-std::tuple<std::string, int, int> PdbFile::getResNameNumCount(int index) const
+std::tuple<std::string, int, int> Protein::getResBasicInfo(int index) const
 {
     return residues[index].getNameNumberCount();
 }
@@ -147,7 +147,7 @@ std::tuple<std::string, int, int> PdbFile::getResNameNumCount(int index) const
 //---HELPER METHODS - READ------------------------------------------------------
 //==============================================================================
 
-bool PdbFile::readLines(std::ifstream& ifile)
+bool Protein::readPDBlines(std::ifstream& ifile)
 {
     // check if the file is opened
     if( ifile.fail() || ! ifile.is_open() ){
@@ -186,7 +186,7 @@ bool PdbFile::readLines(std::ifstream& ifile)
 //---HELPER METHODS - PARSE-----------------------------------------------------
 //==============================================================================
 
-bool PdbFile::parseAtom(const std::string& line, int numLine)
+bool Protein::parseAtom(const std::string& line, int numLine)
 {
     // Line must have at least 53 chars to obtain all neccesary values
     if ( line.length() < 53 ){
@@ -308,7 +308,7 @@ bool PdbFile::parseAtom(const std::string& line, int numLine)
 
 //------------------------------------------------------------------------------
 
-void PdbFile::parseResidues(void)
+void Protein::parseResidues(void)
 {
     const auto atomsSize {static_cast<int>(atoms.size())};      // atoms vector size
     auto firstAtom {0};                                         // index of the first atom in a residue
@@ -329,7 +329,7 @@ void PdbFile::parseResidues(void)
         // distinguish between two different residue
         if ( atoms[i].getResidueNumber() != atoms[i+1].getResidueNumber() ){
 
-            std::tie(colorR, colorG, colorB, residueChar) = parseRGB_Char( atoms[i].getResidueName() );
+            std::tie(colorR, colorG, colorB, residueChar) = parseResColor_Char( atoms[i].getResidueName() );
             residues.emplace_back( firstAtom, i, atoms[i].getResidueName(), atoms[i].getResidueNumber(), xPos, yPos, colorR, colorG, colorB, residueChar );
 
             firstAtom = i + 1;
@@ -347,7 +347,7 @@ void PdbFile::parseResidues(void)
             // the last atom
         if ( i + 2 == atomsSize ){
 
-            std::tie(colorR, colorG, colorB, residueChar) = parseRGB_Char( atoms[i+1].getResidueName() );
+            std::tie(colorR, colorG, colorB, residueChar) = parseResColor_Char( atoms[i+1].getResidueName() );
             residues.emplace_back( firstAtom, i+1, atoms[i+1].getResidueName(), atoms[i+1].getResidueNumber(), xPos, yPos, colorR, colorG, colorB, residueChar );
         }
     }
@@ -355,7 +355,7 @@ void PdbFile::parseResidues(void)
 
 //------------------------------------------------------------------------------
 
-std::tuple<int, int, int, char> PdbFile::parseRGB_Char(const std::string& residueName) const
+std::tuple<int, int, int, char> Protein::parseResColor_Char(const std::string& residueName) const
 {
     switch(aminoacidMap.count(residueName) ? aminoacidMap.at(residueName) : 0) {
     case 1:
@@ -407,16 +407,16 @@ std::tuple<int, int, int, char> PdbFile::parseRGB_Char(const std::string& residu
 //---HELPER METHODS - PRINT-----------------------------------------------------
 //==============================================================================
 
-void PdbFile::printFileName(void) const
+void Protein::printPDBfileName(void) const
 {
-    std::cout << "File name: " << fileName.toLatin1().constData() << std::endl;
+    std::cout << "File name: " << pdbFileName.toLatin1().constData() << std::endl;
 }
 
 //==============================================================================
 //---HELPER METHODS - CLEAR-----------------------------------------------------
 //==============================================================================
 
-void PdbFile::clearVectors(void)
+void Protein::clearData(void)
 {
     atoms.clear();
 
