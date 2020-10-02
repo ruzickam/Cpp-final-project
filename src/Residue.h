@@ -14,16 +14,22 @@ struct Residue
     // prints
     void print(void) const;
 
+    // unknown residue data
+    static constexpr auto unknownColorR {153};
+    static constexpr auto unknownColorG {153};
+    static constexpr auto unknownColorB {153};
+    static constexpr auto unknownResidueChar {'X'};
+
     // residue data
-    int numOfAtoms;
-    std::string residueName;
-    int residueNumber;
-    double posX;
-    double posY;
-    int colorR;
-    int colorG;
-    int colorB;
-    char residueChar;
+    const int numOfAtoms;
+    const std::string residueName;
+    const int residueNumber;
+    const double posX;
+    const double posY;
+    const int colorR;
+    const int colorG;
+    const int colorB;
+    const char residueChar;
 };
 
 // for std::set

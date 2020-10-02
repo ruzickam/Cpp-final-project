@@ -12,32 +12,32 @@ struct Atom
          double argCoordY, double argCoordZ, double argOccupancy, double argTempFactor, const std::string& argElementName,\
          const std::string& argFormalCharge, bool argIsOccupancy, bool argIsTempFactor);
 
-    // record types
-    static constexpr auto RECORD_UNKNOWN {0};
-    static constexpr auto RECORD_ATOM {1};
-    static constexpr auto RECORD_HEATM {2};
-
     // print
     void print(void) const;
 
+    // record types
+    static constexpr auto unknownRecord {0};
+    static constexpr auto atomRecord {1};
+    static constexpr auto hetatmRecord {2};
+
     // atom data
-    int recordType;
-    int atomNumber;
-    std::string atomName;
-    char alternateLocation;
-    std::string residueName;
-    char chainId;
-    int residueNumber;
-    char iCode;
-    double coordX;
-    double coordY;
-    double coordZ;
-    double occupancy;
-    double tempFactor;
-    std::string elementName;
-    std::string formalCharge;
-    bool isOccupancy;
-    bool isTempFactor;
+    const int recordType;
+    const int atomNumber;
+    const std::string atomName;
+    const char alternateLocation;
+    const std::string residueName;
+    const char chainId;
+    const int residueNumber;
+    const char iCode;
+    const double coordX;
+    const double coordY;
+    const double coordZ;
+    const double occupancy;
+    const double tempFactor;
+    const std::string elementName;
+    const std::string formalCharge;
+    const bool isOccupancy;
+    const bool isTempFactor;
 };
 
 #endif // ATOM_H

@@ -15,7 +15,6 @@ public:
     // constructors
     Protein();
 
-    // open and read PDB file
     bool initFromPDBfile(const QString& dialogFileName);
 
     // getters
@@ -45,10 +44,8 @@ private:
     // clear
     void clearData(void);
 
-    // ----------------------------------------------
-    // DATA
+    // DATA------------------------------------------
 
-    // PDB file name
     QString pdbFileName;
 
     // atom & residue containers

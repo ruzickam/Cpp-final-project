@@ -16,6 +16,7 @@ public:
     int run(void) const;
 
 private:
+
 };
 
 #endif // APPLICATION_H

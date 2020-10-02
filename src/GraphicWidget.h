@@ -34,10 +34,10 @@ public:
 protected:
     // EVENTS
 
-    // add graphic & text
+    // graphic & text painting
     void paintEvent(QPaintEvent* ) override;
 
-    // mouse action
+    // click to select a residue
     void mousePressEvent(QMouseEvent* p_event) override;
 
 private slots:
@@ -52,16 +52,12 @@ private:
     void paintAllResidues(void);
     void paintSelectedResidue(void);
 
-    // ----------------------------------------------
-    // DATA
+    // DATA------------------------------------------
 
-    // PDB File
     Protein protein;
 
-    // selected residue
     int selectedResidue;
 
-    // display shortcuts of residues
     bool areShortcutsDisplayed;
 };
 

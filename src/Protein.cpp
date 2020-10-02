@@ -52,18 +52,14 @@ bool Protein::initFromPDBfile(const QString& dialogFileName)
         return false;
     }
 
-    // copy file name
     pdbFileName = dialogFileName;
 
-    // print file name
     printPDBfileName();
 
-    // clear all previous data
     clearData();
 
     // ---START: FILE MANIPULATION-------------------
 
-    // file definition
     std::ifstream ifile;
 
     // open file
@@ -74,26 +70,23 @@ bool Protein::initFromPDBfile(const QString& dialogFileName)
     }
     std::cout << "Opening file..." << std::endl;
 
-    // read lines
     if ( ! readPDBlines(ifile) )
         return false;
 
-    // close the file
     ifile.close();
 
     // ---END: FILE MANIPULATION---------------------
 
-    // set residues
     parseResidues();
 
     // print atoms
-    for(const auto& i : atoms) {
-        i.print();
+    for(const auto& x : atoms) {
+        x.print();
     }
 
     // print residues
-    for(const auto& i : residues) {
-        i.print();
+    for(const auto& x : residues) {
+        x.print();
     }
 
     return true;
@@ -206,9 +199,9 @@ bool Protein::parseAtom(const std::string& line, int numLine)
     auto recordType {0};
     s = line.substr(0,6);
     if (s == "ATOM  ") {
-        recordType = Atom::RECORD_ATOM;
+        recordType = Atom::atomRecord;
     } else {
-        recordType = Atom::RECORD_HEATM;
+        recordType = Atom::hetatmRecord;
     }
 
     // helper: stringstream
@@ -238,7 +231,7 @@ bool Protein::parseAtom(const std::string& line, int numLine)
     residueName = line.substr(17,3);
 
     // chainID
-    auto chainId {'x'};
+    auto chainId {'X'};
     chainId = line[21];
 
     // residueNumber
@@ -253,7 +246,7 @@ bool Protein::parseAtom(const std::string& line, int numLine)
     }
 
     // iCode
-    auto iCode {'x'};
+    auto iCode {'X'};
     iCode = line[26];
 
     // Coordinates
@@ -350,7 +343,8 @@ void Protein::parseResidues(void)
                 ++columnNumber;
             }
         }
-            // the last residue to be added
+
+        // the last residue to be added
         if ( i + 2 == atomsSize ){
 
             std::tie(colorR, colorG, colorB, residueChar) = parseResColor_Char( atoms[i+1].residueName );
@@ -363,12 +357,13 @@ void Protein::parseResidues(void)
 
 std::tuple<int, int, int, char> Protein::parseResColor_Char(const std::string& residueName) const
 {
+    // find residueName in set
     const auto iter = residueTemplates.find( {0,residueName,0,0.0,0.0,0,0,0,'X'} );
 
     if( iter != residueTemplates.end() ){ // if aminoacid is found
         return std::make_tuple(iter->colorR, iter->colorG, iter->colorB, iter->residueChar);
     } else { // unknown residue
-        return std::make_tuple(153, 153, 153, 'X');
+        return std::make_tuple(Residue::unknownColorR, Residue::unknownColorG, Residue::unknownColorB, Residue::unknownResidueChar);
     }
 }
 

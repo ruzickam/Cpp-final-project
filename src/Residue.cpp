@@ -33,7 +33,7 @@ void Residue::print(void) const
 //---OPERATOR OVERLOADING-------------------------------------------------------
 //==============================================================================
 
-// compare two Residue
+// for std::set
 bool operator< ( const Residue& a, const Residue& b )
 {
     return a.residueName < b.residueName;
