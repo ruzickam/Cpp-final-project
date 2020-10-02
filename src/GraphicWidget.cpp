@@ -177,14 +177,14 @@ void GraphicWidget::paintSelectedResidue(void)
         // output string vars
         std::ostringstream ss;
         std:: string residueName, residueDescription;
-        auto residueNumber {0}, atomsCount {0};
+        auto residueNumber {0}, numOfAtoms {0};
 
         // get: residueName, residueNumber, atomsCount
-        std::tie(residueName, residueNumber, atomsCount) = protein.getResBasicInfo(selectedResidue);
+        std::tie(residueName, residueNumber, numOfAtoms) = protein.getResNameNumberAnumber(selectedResidue);
 
         // make output string
         ss << "Residue: " << residueName << residueNumber;
-        ss << "     Number of atoms: " << atomsCount;
+        ss << "     Number of atoms: " << numOfAtoms;
         residueDescription = ss.str();
 
         // paint tools

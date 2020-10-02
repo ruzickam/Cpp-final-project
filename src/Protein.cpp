@@ -4,31 +4,31 @@
 #include "GraphicWidget.h"
 
 //==============================================================================
-//---MAP FOR SWITCH-------------------------------------------------------------
+//---AMINOACID TEMPLATES INIT---------------------------------------------------
 //==============================================================================
 
-const std::unordered_map<std::string,int> Protein::aminoacidMap
-{
-    {"ALA",1},
-    {"ARG",2},
-    {"ASN",3},
-    {"ASP",4},
-    {"CYS",5},
-    {"GLN",6},
-    {"GLU",7},
-    {"GLY",8},
-    {"HIS",9},
-    {"ILE",10},
-    {"LEU",11},
-    {"LYS",12},
-    {"MET",13},
-    {"PHE",14},
-    {"PRO",15},
-    {"SER",16},
-    {"THR",17},
-    {"TRP",18},
-    {"TYR",19},
-    {"VAL",20}
+const std::set<Residue> Protein::residueTemplates = {
+
+    {0,"ALA",1,0.0,0.0,204, 255, 255, 'A'},
+    {0,"ARG",2,0.0,0.0,230, 6, 6, 'R'},
+    {0,"ASN",3,0.0,0.0,255, 153, 0, 'N'},
+    {0,"ASP",4,0.0,0.0,255, 204, 153, 'D'},
+    {0,"CYS",5,0.0,0.0,0, 255, 255, 'C'},
+    {0,"GLN",6,0.0,0.0,255, 102, 0, 'Q'},
+    {0,"GLU",7,0.0,0.0,255, 204, 0, 'E'},
+    {0,"GLY",8,0.0,0.0,0, 255, 0, 'G'},
+    {0,"HIS",9,0.0,0.0,255, 255, 153, 'H'},
+    {0,"ILE",10,0.0,0.0,0, 0, 128, 'I'},
+    {0,"LEU",11,0.0,0.0,51, 102, 255, 'L'},
+    {0,"LYS",12,0.0,0.0,198, 6, 0, 'K'},
+    {0,"MET",13,0.0,0.0,153, 204, 255, 'M'},
+    {0,"PHE",14,0.0,0.0,0, 204, 255, 'F'},
+    {0,"PRO",15,0.0,0.0,255, 255, 0, 'P'},
+    {0,"SER",16,0.0,0.0,204, 255, 153, 'S'},
+    {0,"THR",17,0.0,0.0,0, 255, 153, 'T'},
+    {0,"TRP",18,0.0,0.0,204, 153, 255, 'W'},
+    {0,"TYR",19,0.0,0.0,204, 255, 204, 'Y'},
+    {0,"VAL",20,0.0,0.0,0, 0, 255, 'V'}
 };
 
 //==============================================================================
@@ -119,28 +119,33 @@ int Protein::getNumOfRes(void) const
 
 std::tuple<double, double> Protein::getResRectXY(int index) const
 {
-    return residues[index].getposXposY();
+    return std::make_tuple(residues[index].posX,\
+                           residues[index].posY);
 }
 
 //------------------------------------------------------------------------------
 
 std::tuple<int, int, int> Protein::getResColor(int index) const
 {
-    return residues[index].getcolorRGB();
+    return std::make_tuple(residues[index].colorR,\
+                           residues[index].colorG,\
+                           residues[index].colorB);
 }
 
 //------------------------------------------------------------------------------
 
 char Protein::getResChar(int index) const
 {
-    return residues[index].getResidueChar();
+    return residues[index].residueChar;
 }
 
 //------------------------------------------------------------------------------
 
-std::tuple<std::string, int, int> Protein::getResBasicInfo(int index) const
+std::tuple<std::string, int, int> Protein::getResNameNumberAnumber(int index) const
 {
-    return residues[index].getNameNumberCount();
+    return std::make_tuple(residues[index].residueName,\
+                           residues[index].residueNumber,\
+                           residues[index].numOfAtoms );
 }
 
 //==============================================================================
@@ -313,30 +318,31 @@ void Protein::parseResidues(void)
     const auto atomsSize {static_cast<int>(atoms.size())};      // atoms vector size
     auto firstAtom {0};                                         // index of the first atom in a residue
     auto columnNumber {0};                                      // start column number
-    auto colorR {153}, colorG {153}, colorB {153};              // residue color
-    auto residueChar {'X'};                                     // res char
 
-    // consts
     auto xPos {GraphicWidget::xStartPosition};                  // start position of the first residue
     auto yPos {GraphicWidget::yStartPosition};                  // start position of the first residue
-    auto columnPerRow {GraphicWidget::columnPerRow};            // number of columns in each row
-    auto spaceBetweenRows {GraphicWidget::spaceBetweenRows};    // space between rows
-    auto rectHeight {GraphicWidget::rectHeight};                // rectangle height
-    auto rectWidth {GraphicWidget::rectWidth};                  // rectangle width
 
     for(auto i {0}; i < atomsSize - 1; ++i) {
 
-        // distinguish between two different residue
-        if ( atoms[i].getResidueNumber() != atoms[i+1].getResidueNumber() ){
+        auto colorR {153}, colorG {153}, colorB {153};              // residue color
+        auto residueChar {'X'};                                     // res char
 
-            std::tie(colorR, colorG, colorB, residueChar) = parseResColor_Char( atoms[i].getResidueName() );
-            residues.emplace_back( firstAtom, i, atoms[i].getResidueName(), atoms[i].getResidueNumber(), xPos, yPos, colorR, colorG, colorB, residueChar );
+        auto columnPerRow {GraphicWidget::columnPerRow};            // number of columns in each row
+        auto spaceBetweenRows {GraphicWidget::spaceBetweenRows};    // space between rows
+        auto rectHeight {GraphicWidget::rectHeight};                // rectangle height
+        auto rectWidth {GraphicWidget::rectWidth};                  // rectangle width
+
+        // distinguish between two different residue
+        if ( atoms[i].residueNumber != atoms[i+1].residueNumber ){
+
+            std::tie(colorR, colorG, colorB, residueChar) = parseResColor_Char( atoms[i].residueName );
+            residues.emplace_back( i - firstAtom + 1 , atoms[i].residueName, atoms[i].residueNumber, xPos, yPos, colorR, colorG, colorB, residueChar );
 
             firstAtom = i + 1;
 
             // check column and set xPos, yPos
             if ( columnNumber == columnPerRow ){
-                yPos = yPos + rectHeight + spaceBetweenRows;   // 8 = space between rows
+                yPos = yPos + rectHeight + spaceBetweenRows;
                 xPos = xPos - (columnPerRow * rectWidth);
                 columnNumber = 0;
             } else {
@@ -344,11 +350,11 @@ void Protein::parseResidues(void)
                 ++columnNumber;
             }
         }
-            // the last atom
+            // the last residue to be added
         if ( i + 2 == atomsSize ){
 
-            std::tie(colorR, colorG, colorB, residueChar) = parseResColor_Char( atoms[i+1].getResidueName() );
-            residues.emplace_back( firstAtom, i+1, atoms[i+1].getResidueName(), atoms[i+1].getResidueNumber(), xPos, yPos, colorR, colorG, colorB, residueChar );
+            std::tie(colorR, colorG, colorB, residueChar) = parseResColor_Char( atoms[i+1].residueName );
+            residues.emplace_back( i - firstAtom + 2, atoms[i+1].residueName, atoms[i+1].residueNumber, xPos, yPos, colorR, colorG, colorB, residueChar );
         }
     }
 }
@@ -357,48 +363,11 @@ void Protein::parseResidues(void)
 
 std::tuple<int, int, int, char> Protein::parseResColor_Char(const std::string& residueName) const
 {
-    switch(aminoacidMap.count(residueName) ? aminoacidMap.at(residueName) : 0) {
-    case 1:
-        return std::make_tuple(204, 255, 255, 'A');
-    case 2:
-        return std::make_tuple(230, 6, 6, 'R');
-    case 3:
-        return std::make_tuple(255, 153, 0, 'N');
-    case 4:
-        return std::make_tuple(255, 204, 153, 'D');
-    case 5:
-        return std::make_tuple(0, 255, 255, 'C');
-    case 6:
-        return std::make_tuple(255, 102, 0, 'Q');
-    case 7:
-        return std::make_tuple(255, 204, 0, 'E');
-    case 8:
-        return std::make_tuple(0, 255, 0, 'G');
-    case 9:
-        return std::make_tuple(255, 255, 153, 'H');
-    case 10:
-        return std::make_tuple(0, 0, 128, 'I');
-    case 11:
-        return std::make_tuple(51, 102, 255, 'L');
-    case 12:
-        return std::make_tuple(198, 6, 0, 'K');
-    case 13:
-        return std::make_tuple(153, 204, 255, 'M');
-    case 14:
-        return std::make_tuple(0, 204, 255, 'F');
-    case 15:
-        return std::make_tuple(255, 255, 0, 'P');
-    case 16:
-        return std::make_tuple(204, 255, 153, 'S');
-    case 17:
-        return std::make_tuple(0, 255, 153, 'T');
-    case 18:
-        return std::make_tuple(204, 153, 255, 'W');
-    case 19:
-        return std::make_tuple(204, 255, 204, 'Y');
-    case 20:
-        return std::make_tuple(0, 0, 255, 'V');
-    case 0: //this is for the undefined case
+    const auto iter = residueTemplates.find( {0,residueName,0,0.0,0.0,0,0,0,'X'} );
+
+    if( iter != residueTemplates.end() ){ // if aminoacid is found
+        return std::make_tuple(iter->colorR, iter->colorG, iter->colorB, iter->residueChar);
+    } else { // unknown residue
         return std::make_tuple(153, 153, 153, 'X');
     }
 }

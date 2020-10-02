@@ -32,11 +32,11 @@ int Application::run(void) const
 
     // -------------------------------------------------------
 
+    // BUTTONs AT THE RIGHT SIDE
     QPushButton buttonHide {"Hide", &mainWindow};
     QPushButton buttonShow {"Show", &mainWindow};
     QPushButton buttonOpenFile {"Open File", &mainWindow};
 
-    // right column with buttons  
     rightLayout.addWidget(&buttonHide);
     rightLayout.addWidget(&buttonShow);
     rightLayout.addWidget(&buttonOpenFile);

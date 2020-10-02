@@ -1,9 +1,10 @@
 #ifndef PDBFILE_H
 #define PDBFILE_H
 
-#include <vector>
-#include <unordered_map>
+#include <tuple>
 #include <fstream>
+#include <vector>
+#include <set>
 #include <QString>
 #include "Atom.h"
 #include "Residue.h"
@@ -25,7 +26,7 @@ public:
     std::tuple<double, double> getResRectXY(int index) const;
     std::tuple<int, int, int> getResColor(int index) const;
     char getResChar(int index) const;
-    std::tuple<std::string, int, int> getResBasicInfo(int index) const; // residueName, residueNumber, atomsCount
+    std::tuple<std::string, int, int> getResNameNumberAnumber(int index) const;
 
 private:
     // HELPER METHODS
@@ -47,15 +48,15 @@ private:
     // ----------------------------------------------
     // DATA
 
-    // map for rgb, resChar
-    static const std::unordered_map<std::string,int> aminoacidMap;
-
     // PDB file name
     QString pdbFileName;
 
     // atom & residue containers
     std::vector<Atom>       atoms;
     std::vector<Residue>    residues;
+
+    // set of aminoacid templates
+    static const std::set<Residue> residueTemplates;
 };
 
 #endif // PDBFILE_H

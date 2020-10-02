@@ -3,9 +3,8 @@
 
 #include <string>
 
-class Atom
+struct Atom
 {
-public:
     // constructors
     Atom() = delete;
     Atom(int argRecordType, int argAtomNumber, const std::string& argAtomName, char argAlternateLocation,\
@@ -18,14 +17,9 @@ public:
     static constexpr auto RECORD_ATOM {1};
     static constexpr auto RECORD_HEATM {2};
 
-    // getters
-    int getResidueNumber(void) const;
-    std::string getResidueName(void) const;
-
     // print
     void print(void) const;
 
-private:
     // atom data
     int recordType;
     int atomNumber;
