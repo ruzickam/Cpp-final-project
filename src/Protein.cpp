@@ -308,21 +308,16 @@ bool Protein::parseAtom(const std::string& line, int numLine)
 
 void Protein::parseResidues(void)
 {
-    const int atomsSize { static_cast<int>(atoms.size()) };      // atoms vector size
+    const int atomsSize { static_cast<int>(atoms.size()) };     // atoms vector size
     auto firstAtom {0};                                         // index of the first atom in a residue
     auto columnNumber {0};                                      // start column number
-
-    double xPos {GraphicWidget::xStartPosition};                  // start position of the first residue
-    double yPos {GraphicWidget::yStartPosition};                  // start position of the first residue
+    double xPos {GraphicWidget::xStartPosition};                // start position of the first residue
+    double yPos {GraphicWidget::yStartPosition};                // start position of the first residue
 
     for(auto i {0}; i < atomsSize - 1; ++i) {
 
-        auto colorR {153}, colorG {153}, colorB {153};              // residue color
-        auto residueChar {'X'};                                     // res char
-        constexpr int columnPerRow {GraphicWidget::columnPerRow};            // number of columns in each row
-        constexpr double spaceBetweenRows {GraphicWidget::spaceBetweenRows};    // space between rows
-        constexpr double rectHeight {GraphicWidget::rectHeight};                // rectangle height
-        constexpr double rectWidth {GraphicWidget::rectWidth};                  // rectangle width
+        auto colorR {153}, colorG {153}, colorB {153};                       // residue color
+        auto residueChar {'X'};                                              // res char
 
         // distinguish between two different residue
         if ( atoms[i].residueNumber != atoms[i+1].residueNumber ){
@@ -333,6 +328,10 @@ void Protein::parseResidues(void)
             firstAtom = i + 1;
 
             // check column and set xPos, yPos
+            constexpr int columnPerRow {GraphicWidget::columnPerRow};            // number of columns in each row
+            constexpr double spaceBetweenRows {GraphicWidget::spaceBetweenRows}; // space between rows
+            constexpr double rectHeight {GraphicWidget::rectHeight};             // rectangle height
+            constexpr double rectWidth {GraphicWidget::rectWidth};               // rectangle width
             if ( columnNumber == columnPerRow ){
                 yPos = yPos + rectHeight + spaceBetweenRows;
                 xPos = xPos - (columnPerRow * rectWidth);
@@ -359,14 +358,13 @@ std::tuple<int, int, int, char> Protein::parseResColor_Char(const std::string& r
     // find residueName in set
     const auto iter = residueTemplates.find( {0,residueName,0,0.0,0.0,0,0,0,'X'} );
 
-    constexpr int colorR = Residue::unknownColorR;
-    constexpr int colorG = Residue::unknownColorG;
-    constexpr int colorB = Residue::unknownColorB;
-    constexpr char residueChar = Residue::unknownResidueChar;
-
     if( iter != residueTemplates.end() ){ // if aminoacid is found
         return std::make_tuple(iter->colorR, iter->colorG, iter->colorB, iter->residueChar);
     } else { // unknown residue
+        constexpr int colorR = Residue::unknownColorR;
+        constexpr int colorG = Residue::unknownColorG;
+        constexpr int colorB = Residue::unknownColorB;
+        constexpr char residueChar = Residue::unknownResidueChar;
         return std::make_tuple(colorR, colorG, colorB, residueChar);
     }
 }
