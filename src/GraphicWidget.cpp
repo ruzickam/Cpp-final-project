@@ -33,10 +33,9 @@ void GraphicWidget::paintEvent(QPaintEvent* )
 void GraphicWidget::mousePressEvent(QMouseEvent* p_event)
 {
     // get vector size
-    const auto residuesSize {protein.getNumOfRes()};
+    const int residuesSize { protein.getNumOfRes() };
 
     for(auto i {0}; i < residuesSize; ++i) {
-
         // get: posX, posY
         auto resPosX {0.0}, resPosY {0.0};
         std::tie(resPosX, resPosY) = protein.getResRectXY(i);
@@ -123,7 +122,7 @@ void GraphicWidget::paintAllResidues(void)
 
 // 2. ---draw rectangles + symbols---
     // get vector size
-    const auto residuesSize {protein.getNumOfRes()};
+    const int residuesSize { protein.getNumOfRes() };
 
     for(auto i {0}; i < residuesSize; ++i) {
 
@@ -141,7 +140,7 @@ void GraphicWidget::paintAllResidues(void)
         // draw shortcuts
         if ( areShortcutsDisplayed == true ){
 
-            auto resChar {protein.getResChar(i)};
+            const char resChar { protein.getResChar(i) };
 
             painter.setPen(pen1);
 
@@ -158,7 +157,7 @@ void GraphicWidget::paintAllResidues(void)
 void GraphicWidget::paintSelectedResidue(void)
 {
     // get vector size
-    const auto residuesSize {protein.getNumOfRes()};
+    const int residuesSize { protein.getNumOfRes() };
 
     // range check
     if( ( selectedResidue < residuesSize ) && ( selectedResidue > -1 ) ){

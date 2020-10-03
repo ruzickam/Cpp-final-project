@@ -105,7 +105,7 @@ QString Protein::getPDBfileName(void) const
 
 int Protein::getNumOfRes(void) const
 {
-    return static_cast<int>(residues.size());
+    return static_cast<int>( residues.size() );
 }
 
 //------------------------------------------------------------------------------
@@ -308,22 +308,21 @@ bool Protein::parseAtom(const std::string& line, int numLine)
 
 void Protein::parseResidues(void)
 {
-    const auto atomsSize {static_cast<int>(atoms.size())};      // atoms vector size
+    const int atomsSize { static_cast<int>(atoms.size()) };      // atoms vector size
     auto firstAtom {0};                                         // index of the first atom in a residue
     auto columnNumber {0};                                      // start column number
 
-    auto xPos {GraphicWidget::xStartPosition};                  // start position of the first residue
-    auto yPos {GraphicWidget::yStartPosition};                  // start position of the first residue
+    double xPos {GraphicWidget::xStartPosition};                  // start position of the first residue
+    double yPos {GraphicWidget::yStartPosition};                  // start position of the first residue
 
     for(auto i {0}; i < atomsSize - 1; ++i) {
 
         auto colorR {153}, colorG {153}, colorB {153};              // residue color
         auto residueChar {'X'};                                     // res char
-
-        auto columnPerRow {GraphicWidget::columnPerRow};            // number of columns in each row
-        auto spaceBetweenRows {GraphicWidget::spaceBetweenRows};    // space between rows
-        auto rectHeight {GraphicWidget::rectHeight};                // rectangle height
-        auto rectWidth {GraphicWidget::rectWidth};                  // rectangle width
+        constexpr int columnPerRow {GraphicWidget::columnPerRow};            // number of columns in each row
+        constexpr double spaceBetweenRows {GraphicWidget::spaceBetweenRows};    // space between rows
+        constexpr double rectHeight {GraphicWidget::rectHeight};                // rectangle height
+        constexpr double rectWidth {GraphicWidget::rectWidth};                  // rectangle width
 
         // distinguish between two different residue
         if ( atoms[i].residueNumber != atoms[i+1].residueNumber ){
@@ -360,10 +359,15 @@ std::tuple<int, int, int, char> Protein::parseResColor_Char(const std::string& r
     // find residueName in set
     const auto iter = residueTemplates.find( {0,residueName,0,0.0,0.0,0,0,0,'X'} );
 
+    constexpr int colorR = Residue::unknownColorR;
+    constexpr int colorG = Residue::unknownColorG;
+    constexpr int colorB = Residue::unknownColorB;
+    constexpr char residueChar = Residue::unknownResidueChar;
+
     if( iter != residueTemplates.end() ){ // if aminoacid is found
         return std::make_tuple(iter->colorR, iter->colorG, iter->colorB, iter->residueChar);
     } else { // unknown residue
-        return std::make_tuple(Residue::unknownColorR, Residue::unknownColorG, Residue::unknownColorB, Residue::unknownResidueChar);
+        return std::make_tuple(colorR, colorG, colorB, residueChar);
     }
 }
 

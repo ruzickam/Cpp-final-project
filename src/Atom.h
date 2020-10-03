@@ -16,9 +16,9 @@ struct Atom
     void print(void) const;
 
     // record types
-    static constexpr int unknownRecord {0};
-    static constexpr int atomRecord {1};
-    static constexpr int hetatmRecord {2};
+    static constexpr auto unknownRecord {0};
+    static constexpr auto atomRecord {1};
+    static constexpr auto hetatmRecord {2};
 
     // atom data
     const int recordType;
