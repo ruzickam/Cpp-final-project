@@ -15,10 +15,10 @@ struct Residue
     void print(void) const;
 
     // unknown residue data
-    static constexpr auto unknownColorR {153};
-    static constexpr auto unknownColorG {153};
-    static constexpr auto unknownColorB {153};
-    static constexpr auto unknownResidueChar {'X'};
+    static constexpr int unknownColorR {153};
+    static constexpr int unknownColorG {153};
+    static constexpr int unknownColorB {153};
+    static constexpr char unknownResidueChar {'X'};
 
     // residue data
     const int numOfAtoms;

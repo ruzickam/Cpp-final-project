@@ -223,7 +223,7 @@ bool Protein::parseAtom(const std::string& line, int numLine)
     atomName = line.substr(12,4);
 
     // alternateLocation
-    auto alternateLocation {'x'};
+    auto alternateLocation {'X'};
     alternateLocation = line[16];
 
     // residueName

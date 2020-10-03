@@ -15,21 +15,21 @@ public:
     GraphicWidget(QWidget* parent);
 
     // window size
-    static constexpr auto minWindowWidth {400};
-    static constexpr auto minWindowHeight {700};
+    static constexpr int minWindowWidth {400};
+    static constexpr int minWindowHeight {700};
 
     // graphic constants
-    static constexpr auto rectWidth {18.0};
-    static constexpr auto rectHeight {20.0};
+    static constexpr double rectWidth {18.0};
+    static constexpr double rectHeight {20.0};
 
-    static constexpr auto xStartPosition {10.0};
-    static constexpr auto yStartPosition {56.0};
+    static constexpr double xStartPosition {10.0};
+    static constexpr double yStartPosition {56.0};
 
-    static constexpr auto columnPerRow {19};
-    static constexpr auto spaceBetweenRows {8};
+    static constexpr int columnPerRow {19};
+    static constexpr int spaceBetweenRows {8};
 
-    static constexpr auto xTextMultiplier {0.28};
-    static constexpr auto yTextMultiplier {0.78};
+    static constexpr double xTextMultiplier {0.28};
+    static constexpr double yTextMultiplier {0.78};
 
 protected:
     // EVENTS
