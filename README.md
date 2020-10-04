@@ -1,16 +1,16 @@
-# Show PDB Sequence
+# Visualize PDB Sequence
 
-Small app to visualize a PDB (Protein Data Bank) file.
+Small app for visualization of a PDB (Protein Data Bank) file.
 
 # Compile on linux
 
 $ cd ..
 
-$ mkdir build-show-pdb-sequence
+$ mkdir build-visualize-pdb-sequence
 
-$ cd build-show-pdb-sequence
+$ cd build-visualize-pdb-sequence
 
-$ qmake -o Makefile ../show-pdb-sequence/final.pro
+$ qmake -o Makefile ../visualize-pdb-sequence/final.pro
 
 $ make
 
