@@ -4,11 +4,13 @@ Small app to visualize a PDB (Protein Data Bank) file.
 
 # Compile on linux
 
-$ mkdir build
+$ cd ..
 
-$ cd build
+$ mkdir build-show-pdb-sequence
 
-$ qmake -o Makefile ../final.pro
+$ cd build-show-pdb-sequence
+
+$ qmake -o Makefile ../show-pdb-sequence/final.pro
 
 $ make
 
